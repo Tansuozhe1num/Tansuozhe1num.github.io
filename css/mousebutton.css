@@ -44,3 +44,8 @@ i:hover {
 #nav .site-page:hover {
     cursor: url('指定样式cur文件路径'), auto;
 }
+
+/* 点击时的鼠标指针 */
+*:active {
+    cursor: url('/css/SizeAll.cur'), auto;
+}
