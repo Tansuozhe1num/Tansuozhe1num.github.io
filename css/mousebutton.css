@@ -17,7 +17,7 @@ a:hover {
 
 /* 选中输入框时的鼠标指针 */
 input:hover {
-    cursor: url('指定样式cur文件路径'), auto;
+    cursor: url('./mouse/IBeam.cur'), auto;
 }
 
 /* 悬停按钮时的鼠标指针 */
