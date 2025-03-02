@@ -165,3 +165,9 @@
     display: flex;
     flex-wrap: nowrap;
 }
+
+# Time difference between publish date and now (網頁運行時間)
+# Formal: Month/Day/Year Time or Year/Month/Day Time
+runtimeshow:
+  enable: true
+  publish_date: 3/5/2022 00:00:00
