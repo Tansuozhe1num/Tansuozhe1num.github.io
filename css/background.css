@@ -92,7 +92,7 @@
 
 #nav-right {
     flex: 1 1 auto;
-    justify-content: flex-end;
+    justify-content: center;
     margin-left: auto;
     display: flex;
     flex-wrap: nowrap; /* 可根据需求调整 */
@@ -107,3 +107,4 @@
 #nav {
     transition: none;
 }
+
