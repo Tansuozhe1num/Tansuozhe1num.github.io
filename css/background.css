@@ -90,7 +90,7 @@
     background: rgba(255, 255, 255, .6);
 }
 
-#nav-right{
+.nav-right {
     flex:1 1 auto;
     justify-content: flex-end;
     margin-left: auto;
