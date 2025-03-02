@@ -25,34 +25,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Codeforces-1007div2题解</title>
-    <url>/2025/03/01/Codeforces-1007div2%E9%A2%98%E8%A7%A3/</url>
-    <content><![CDATA[<h2 id="A-D1题解"><a href="#A-D1题解" class="headerlink" title="A - D1题解"></a>A - D1题解</h2><p>连续掉分ing, 什么时候才能变得又快又猛呢hehehe。。。</p>
-<h2 id="A-The-Play-Never-Ends"><a href="#A-The-Play-Never-Ends" class="headerlink" title="A. The Play Never Ends"></a>A. The Play Never Ends</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> i64 = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    i64 k;</span><br><span class="line">    cin &gt;&gt; k;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (k % <span class="number">3</span> == <span class="number">1</span>) &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Yes\n&quot;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;No\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> t;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(t--) &#123;</span><br><span class="line">        <span class="built_in">solve</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="B-Perfecto"><a href="#B-Perfecto" class="headerlink" title="B. Perfecto"></a>B. Perfecto</h2><p>打表观察 从 1 到 300 sum的和是平方数的数字，发现和是平方数的只有  1 36 1225…..， 想要不出现平方数，只需要在前 i 个（其中 i 是使得sum是平方数的数字）不全是i的排列，也就是把每个满足和是平方数的最后一个数字和下一个数字替换，如果不超出范围就可以，否则-1</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> i64 = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    i64 n;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line"></span><br><span class="line">    i64 sum = <span class="number">0</span>;</span><br><span class="line">    <span class="function">vector&lt;i64&gt; <span class="title">a</span><span class="params">(n + <span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (i64 i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        a[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (i64 i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        sum += a[i];</span><br><span class="line">        i64 g = <span class="built_in">sqrt</span>(sum);</span><br><span class="line">        <span class="keyword">if</span> (g * g == sum) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i + <span class="number">1</span> &gt; n) &#123;</span><br><span class="line">                cout &lt;&lt; <span class="string">&quot;-1&quot;</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            sum -= a[i];</span><br><span class="line">            <span class="built_in">swap</span>(a[i], a[i + <span class="number">1</span>]);</span><br><span class="line">            sum += a[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i64 i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        cout &lt;&lt; a[i] &lt;&lt; <span class="string">&quot; \n&quot;</span>[i == n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    i64 t;</span><br><span class="line">    cin &gt;&gt; t;   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(t--) &#123;</span><br><span class="line">        <span class="built_in">solve</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="C-Trapmigiano-Reggiano"><a href="#C-Trapmigiano-Reggiano" class="headerlink" title="C. Trapmigiano Reggiano"></a>C. Trapmigiano Reggiano</h2><p> 以en为根， 对树进行分层，每次取深度较大的节点，之后取深度较小的节点，走最深的情况是一条链，这时候会走 n / 2个点，之后n / 2个操作又会回到根，其他情况会在某条最长链的某个节点来后跳（因为有别的树链），如果最后回到原点直接输出，否则-1</p>
-<blockquote>
-<p>update: 看了大佬们说答案似乎不可能出现-1， 好像可以直接后序遍历，答案总会存在</p>
-</blockquote>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> i64 = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> inf = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n, st, en;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; st &gt;&gt; en;</span><br><span class="line"></span><br><span class="line">    vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">e</span>(n + <span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="type">int</span> u, v;</span><br><span class="line">        cin &gt;&gt; u &gt;&gt; v;</span><br><span class="line">        e[u].<span class="built_in">push_back</span>(v);</span><br><span class="line">        e[v].<span class="built_in">push_back</span>(u);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">dis</span><span class="params">(n + <span class="number">1</span>, <span class="number">-1</span>)</span></span>;</span><br><span class="line">    dis[en] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> dfs = [&amp;](<span class="keyword">auto</span> self, <span class="type">int</span> u, <span class="type">int</span> fa) -&gt; <span class="type">void</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> v : e[u]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (v != fa) &#123;</span><br><span class="line">                dis[v] = dis[u] + <span class="number">1</span>;</span><br><span class="line">                <span class="built_in">self</span>(self, v, u);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="built_in">dfs</span>(dfs, en, <span class="number">-1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">ans</span><span class="params">(n + <span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        ans[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">sort</span>(ans.<span class="built_in">begin</span>() + <span class="number">1</span>, ans.<span class="built_in">end</span>(), </span><br><span class="line">        [&amp;](<span class="type">int</span> a, <span class="type">int</span> b) &#123;</span><br><span class="line">            <span class="keyword">return</span> dis[a] &gt; dis[b];</span><br><span class="line">        &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//cerr &lt;&lt; &quot;dis:&quot; &lt;&lt; dis[st] &lt;&lt; &#x27;\n&#x27;;</span></span><br><span class="line">    <span class="keyword">if</span> (dis[st] == <span class="number">-1</span>) &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;-1\n&quot;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            cout &lt;&lt; ans[i] &lt;&lt; <span class="string">&quot; \n&quot;</span>[i == n];</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> t;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (t--) &#123;</span><br><span class="line">        <span class="built_in">solve</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="D1-Infinite-Sequence-Easy-Version"><a href="#D1-Infinite-Sequence-Easy-Version" class="headerlink" title="D1. Infinite Sequence (Easy Version)"></a>D1. Infinite Sequence (Easy Version)</h2><p> 手玩样例， 发现 7 = 8, 78 = 79……, 那么每对在 “^” 内（也就是除以二一样）的数字总是一样的，他们作为下一个数字的异或和的时候总是不做贡献，可以忽略。</p>
-<p>我们不妨补全给定的n数组，使得n总是奇数（这样下一位置开始时候总是出现两两相等情况）</p>
-<p>继续观察，发现</p>
-<ul>
-<li>当 x / 2是奇数时候，这时除了前n个给定的数字，其他总是两两成对出现， 此时 x = s[ n ] &amp; 1;</li>
-<li>当 x / 2是偶数的时候，除了x / 2,在n + 1到x / 2之间的所有数字都是成对出现，不参与计算，故 x = s[ n ] &amp; (x / 2),</li>
-</ul>
-<p>这样递归下去可以找到答案，最坏时间复杂度为o(logn);</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> i64 = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    i64 n, l, r;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; l &gt;&gt; r;</span><br><span class="line"></span><br><span class="line">    <span class="function">vector&lt;i64&gt; <span class="title">a</span><span class="params">(n + <span class="number">1</span>)</span>, <span class="title">s</span><span class="params">(n + <span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        cin &gt;&gt; a[i];</span><br><span class="line">        s[i] = s[i - <span class="number">1</span>] + a[i];</span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (n % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">        n++;</span><br><span class="line">        a.<span class="built_in">push_back</span>(s[n / <span class="number">2</span>] &amp; <span class="number">1</span>);</span><br><span class="line">        s.<span class="built_in">push_back</span>(s[n - <span class="number">1</span>] + a[n]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> f = [&amp;](<span class="keyword">auto</span> self, i64 x) -&gt; <span class="type">int</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (x &lt;= n) &#123;</span><br><span class="line">            <span class="keyword">return</span> a[x];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (x / <span class="number">2</span> &lt;= n) &#123;</span><br><span class="line">            <span class="keyword">return</span> (s[x / <span class="number">2</span>] &amp; <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> g;</span><br><span class="line">        <span class="keyword">if</span> ((((x / <span class="number">2</span>) - n) &amp; <span class="number">1</span>)) &#123;</span><br><span class="line">            g = <span class="built_in">self</span>(self, x / <span class="number">2</span>) ^ (s[n] &amp; <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            g = (s[n] &amp; <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> g;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// if (l &lt;= n * 2) &#123;</span></span><br><span class="line">    <span class="comment">//     for (int i = n + 1; i &lt;= l; i++) &#123;</span></span><br><span class="line">    <span class="comment">//         a.push_back(s[i / 2] &amp; 1);</span></span><br><span class="line">    <span class="comment">//         s.push_back(a[i] + s[i - 1]);</span></span><br><span class="line">    <span class="comment">//     &#125;</span></span><br><span class="line">    <span class="comment">//     cout &lt;&lt; a[l] &lt;&lt; &#x27;\n&#x27;;</span></span><br><span class="line">    <span class="comment">//     return;</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="built_in">f</span>(f, l) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> t;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(t--) &#123;</span><br><span class="line">        <span class="built_in">solve</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>codeforce题解</category>
-      </categories>
-      <tags>
-        <tag>codeforce</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Educational-codeforce-Round174题解</title>
     <url>/2025/02/27/Educational-codeforce-Round174%E9%A2%98%E8%A7%A3/</url>
     <content><![CDATA[<p><a href="https://codeforces.com/contest/2069">Edu174</a></p>
@@ -168,6 +140,359 @@ $$
       <tags>
         <tag>codeforce</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Educational codeforceRound 173 题解</title>
+    <url>/2024/12/26/Educational-codeforceRound-173-%E9%A2%98%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="A"><a href="#A" class="headerlink" title="A"></a>A</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="B"><a href="#B" class="headerlink" title="B"></a>B</h2><h2 id="C"><a href="#C" class="headerlink" title="C"></a>C</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> i64 = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"><span class="keyword">constexpr</span> i64 inf = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">tuple&lt;T, T, T&gt; <span class="title">MaxArray</span><span class="params">(<span class="type">const</span> vector&lt;T&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (nums.<span class="built_in">size</span>() == <span class="number">1</span>) <span class="keyword">return</span> &#123;<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    T cur = nums[<span class="number">1</span>], maxp = nums[<span class="number">1</span>];      </span><br><span class="line">    <span class="type">int</span> start = <span class="number">1</span>;              </span><br><span class="line">    <span class="type">int</span> le = <span class="number">1</span>;        </span><br><span class="line">    <span class="type">int</span> ri = <span class="number">1</span>;            </span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt; nums.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (cur + nums[i] &lt; nums[i]) &#123;</span><br><span class="line">            cur = nums[i];</span><br><span class="line">            start = i;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            cur += nums[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (cur &gt; maxp) &#123;</span><br><span class="line">            maxp = cur;</span><br><span class="line">            le = start; </span><br><span class="line">            ri = i;       </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;le, ri, maxp&#125;; </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line"></span><br><span class="line">    <span class="function">vector&lt;i64&gt; <span class="title">a</span><span class="params">(n + <span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="type">int</span> pos = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        cin &gt;&gt; a[i];</span><br><span class="line">        <span class="keyword">if</span> (a[i] != <span class="number">1</span> &amp;&amp; a[i] != <span class="number">-1</span>) &#123;</span><br><span class="line">            pos = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (pos == <span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="keyword">auto</span> [x, y, z] = <span class="built_in">MaxArray</span>&lt;i64&gt; (a);</span><br><span class="line">        i64 tp = <span class="built_in">max</span>(<span class="number">0LL</span>, z);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            a[i] = -a[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">auto</span> [h, j, p] = <span class="built_in">MaxArray</span>&lt;i64&gt; (a);</span><br><span class="line"></span><br><span class="line">        i64 kp = <span class="built_in">max</span>(<span class="number">0LL</span>, p);</span><br><span class="line">        kp = -kp;</span><br><span class="line"></span><br><span class="line">        cout &lt;&lt; tp - kp + <span class="number">1</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = kp; i &lt;= tp; i++) &#123;</span><br><span class="line">            cout &lt;&lt; i &lt;&lt; <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">vector&lt;i64&gt; <span class="title">l</span><span class="params">(<span class="number">1</span>)</span>, <span class="title">r</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; pos; i++) &#123;</span><br><span class="line">        l.<span class="built_in">push_back</span>(a[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = pos + <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        r.<span class="built_in">push_back</span>(a[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> [x, y, z] = <span class="built_in">MaxArray</span>(l);</span><br><span class="line">    z = <span class="built_in">max</span>(<span class="number">0LL</span>, z);</span><br><span class="line">    i64 lmax = z;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= l.<span class="built_in">size</span>() - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        l[i] = -l[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> [p, u, b] = <span class="built_in">MaxArray</span>(l);</span><br><span class="line">    b = <span class="built_in">max</span>(<span class="number">0LL</span>, b);</span><br><span class="line">    i64 lmin = -b;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> [gg, ee, f] = <span class="built_in">MaxArray</span>(r);</span><br><span class="line">    f = <span class="built_in">max</span>(<span class="number">0LL</span>, f);</span><br><span class="line">    i64 rmax = f;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= r.<span class="built_in">size</span>() - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        r[i] = -r[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> [ioi, powp, w] = <span class="built_in">MaxArray</span>(r);</span><br><span class="line">    w = <span class="built_in">max</span>(w, <span class="number">0LL</span>);</span><br><span class="line">    i64 rmin = -w;</span><br><span class="line"></span><br><span class="line">    set&lt;i64&gt; is;</span><br><span class="line">    <span class="keyword">for</span> (i64 i = <span class="built_in">min</span>(rmin, lmin); i &lt;= <span class="number">0</span>; i++) &#123;</span><br><span class="line">        is.<span class="built_in">insert</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt;= <span class="built_in">max</span>(lmax, rmax); i++) &#123;</span><br><span class="line">        is.<span class="built_in">insert</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    i64 sum = <span class="number">0</span>;</span><br><span class="line">    i64 mp = <span class="number">0</span>;</span><br><span class="line">    i64 mi = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = pos + <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        sum += a[i];</span><br><span class="line">        mp = <span class="built_in">max</span>(<span class="number">0LL</span>, <span class="built_in">max</span>(mp, sum));</span><br><span class="line">        mi = <span class="built_in">min</span>(<span class="number">0LL</span>, <span class="built_in">min</span>(mi, sum));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    i64 mmp = <span class="number">0</span>, mmi = <span class="number">0</span>;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (i64 i = pos - <span class="number">1</span>; i &gt;= <span class="number">1</span>; i--) &#123;</span><br><span class="line">        sum += a[i];</span><br><span class="line">        mmp = <span class="built_in">max</span>(<span class="number">0LL</span>, <span class="built_in">max</span>(mmp, sum));</span><br><span class="line">        mmi = <span class="built_in">min</span>(<span class="number">0LL</span>, <span class="built_in">min</span>(mmi, sum));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    i64 tminp = mmi + mi;</span><br><span class="line">    i64 tmaxp = mmp + mp;</span><br><span class="line">    <span class="comment">//cerr &lt;&lt; tminp &lt;&lt; &#x27; &#x27; &lt;&lt; tmaxp &lt;&lt; &#x27;\n&#x27;;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i64 i = a[pos] + tminp; i &lt;= a[pos] + tmaxp; i++) &#123;</span><br><span class="line">        is.<span class="built_in">insert</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; is.<span class="built_in">size</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> x : is) &#123;</span><br><span class="line">        cout &lt;&lt; x &lt;&lt; <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> t;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(t--) &#123;</span><br><span class="line">        <span class="built_in">solve</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> i64 = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"><span class="keyword">constexpr</span> i64 inf = <span class="number">1e18</span> + <span class="number">9</span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    i64 l, r, g;</span><br><span class="line">    cin &gt;&gt; l &gt;&gt; r &gt;&gt; g;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (g &gt; r) &#123;</span><br><span class="line">        cout &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    i64 de = (l / g) + ((l % g) ? <span class="number">1</span> : <span class="number">0</span>);</span><br><span class="line">    i64 kp = (r / g);</span><br><span class="line">   <span class="comment">// cerr &lt;&lt; &quot;!:&quot; &lt;&lt; de &lt;&lt; &#x27; &#x27; &lt;&lt; kp &lt;&lt; &#x27;\n&#x27;;</span></span><br><span class="line">    <span class="keyword">if</span> (g == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (l == <span class="number">1</span>) &#123;</span><br><span class="line">            cout &lt;&lt; <span class="number">1</span> &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">1LL</span> * r &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (l == r) &#123;</span><br><span class="line">            cout &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        i64 maxp = <span class="number">0</span>;</span><br><span class="line">        i64 ll = l, rr = r;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i64 i = l; i &lt;= r; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (r - i &lt;= maxp) <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">for</span> (i64 j = r; j &gt;= l; j--) &#123;</span><br><span class="line">                <span class="keyword">if</span> (j - i &lt;= maxp) <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">gcd</span>(i, j) == <span class="number">1</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (j - i &gt; maxp) &#123;</span><br><span class="line">                        maxp = j - i, ll = i, rr = j;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        cout &lt;&lt; <span class="number">1LL</span> * ll &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">1LL</span> * rr &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (de &gt; kp) &#123;</span><br><span class="line">        cout &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (de == kp) &#123;</span><br><span class="line">        <span class="keyword">if</span> (de == <span class="number">1</span>) &#123;</span><br><span class="line">            cout &lt;&lt; g &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; g &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            cout &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (de == <span class="number">1</span>) &#123;</span><br><span class="line">            cout &lt;&lt; g &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">1LL</span> * g * kp &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        i64 ll = de, rr = kp;</span><br><span class="line">        i64 maxp = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (i64 li = de; li &lt;= kp; li++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (kp - li &lt;= maxp) <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">for</span> (i64 j = kp; j &gt;= li; j--) &#123;</span><br><span class="line">                <span class="keyword">if</span> (j - li &lt;= maxp) <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">gcd</span>(j, li) == <span class="number">1</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (j - li &gt; maxp) &#123;</span><br><span class="line">                        maxp = j - li;</span><br><span class="line">                        rr = j, ll = li;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; ll * <span class="number">1LL</span> * g &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; rr * <span class="number">1LL</span> * g &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> t;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(t--) &#123;</span><br><span class="line">        <span class="built_in">solve</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>codeforce题解</category>
+      </categories>
+      <tags>
+        <tag>codeforce</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Codeforces-1007div2题解</title>
+    <url>/2025/03/01/Codeforces-1007div2%E9%A2%98%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="A-D1题解"><a href="#A-D1题解" class="headerlink" title="A - D1题解"></a>A - D1题解</h2><p>连续掉分ing, 什么时候才能变得又快又猛呢hehehe。。。</p>
+<h2 id="A-The-Play-Never-Ends"><a href="#A-The-Play-Never-Ends" class="headerlink" title="A. The Play Never Ends"></a>A. The Play Never Ends</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> i64 = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    i64 k;</span><br><span class="line">    cin &gt;&gt; k;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (k % <span class="number">3</span> == <span class="number">1</span>) &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Yes\n&quot;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;No\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> t;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(t--) &#123;</span><br><span class="line">        <span class="built_in">solve</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="B-Perfecto"><a href="#B-Perfecto" class="headerlink" title="B. Perfecto"></a>B. Perfecto</h2><p>打表观察 从 1 到 300 sum的和是平方数的数字，发现和是平方数的只有  1 36 1225…..， 想要不出现平方数，只需要在前 i 个（其中 i 是使得sum是平方数的数字）不全是i的排列，也就是把每个满足和是平方数的最后一个数字和下一个数字替换，如果不超出范围就可以，否则-1</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> i64 = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    i64 n;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line"></span><br><span class="line">    i64 sum = <span class="number">0</span>;</span><br><span class="line">    <span class="function">vector&lt;i64&gt; <span class="title">a</span><span class="params">(n + <span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (i64 i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        a[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (i64 i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        sum += a[i];</span><br><span class="line">        i64 g = <span class="built_in">sqrt</span>(sum);</span><br><span class="line">        <span class="keyword">if</span> (g * g == sum) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i + <span class="number">1</span> &gt; n) &#123;</span><br><span class="line">                cout &lt;&lt; <span class="string">&quot;-1&quot;</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            sum -= a[i];</span><br><span class="line">            <span class="built_in">swap</span>(a[i], a[i + <span class="number">1</span>]);</span><br><span class="line">            sum += a[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i64 i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        cout &lt;&lt; a[i] &lt;&lt; <span class="string">&quot; \n&quot;</span>[i == n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    i64 t;</span><br><span class="line">    cin &gt;&gt; t;   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(t--) &#123;</span><br><span class="line">        <span class="built_in">solve</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="C-Trapmigiano-Reggiano"><a href="#C-Trapmigiano-Reggiano" class="headerlink" title="C. Trapmigiano Reggiano"></a>C. Trapmigiano Reggiano</h2><p> 以en为根， 对树进行分层，每次取深度较大的节点，之后取深度较小的节点，走最深的情况是一条链，这时候会走 n / 2个点，之后n / 2个操作又会回到根，其他情况会在某条最长链的某个节点来后跳（因为有别的树链），如果最后回到原点直接输出，否则-1</p>
+<blockquote>
+<p>update: 看了大佬们说答案似乎不可能出现-1， 好像可以直接后序遍历，答案总会存在</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> i64 = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> inf = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n, st, en;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; st &gt;&gt; en;</span><br><span class="line"></span><br><span class="line">    vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">e</span>(n + <span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="type">int</span> u, v;</span><br><span class="line">        cin &gt;&gt; u &gt;&gt; v;</span><br><span class="line">        e[u].<span class="built_in">push_back</span>(v);</span><br><span class="line">        e[v].<span class="built_in">push_back</span>(u);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">dis</span><span class="params">(n + <span class="number">1</span>, <span class="number">-1</span>)</span></span>;</span><br><span class="line">    dis[en] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> dfs = [&amp;](<span class="keyword">auto</span> self, <span class="type">int</span> u, <span class="type">int</span> fa) -&gt; <span class="type">void</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> v : e[u]) &#123;</span><br><span class="line">            <span class="keyword">if</span> (v != fa) &#123;</span><br><span class="line">                dis[v] = dis[u] + <span class="number">1</span>;</span><br><span class="line">                <span class="built_in">self</span>(self, v, u);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="built_in">dfs</span>(dfs, en, <span class="number">-1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">ans</span><span class="params">(n + <span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        ans[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">sort</span>(ans.<span class="built_in">begin</span>() + <span class="number">1</span>, ans.<span class="built_in">end</span>(), </span><br><span class="line">        [&amp;](<span class="type">int</span> a, <span class="type">int</span> b) &#123;</span><br><span class="line">            <span class="keyword">return</span> dis[a] &gt; dis[b];</span><br><span class="line">        &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//cerr &lt;&lt; &quot;dis:&quot; &lt;&lt; dis[st] &lt;&lt; &#x27;\n&#x27;;</span></span><br><span class="line">    <span class="keyword">if</span> (dis[st] == <span class="number">-1</span>) &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;-1\n&quot;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            cout &lt;&lt; ans[i] &lt;&lt; <span class="string">&quot; \n&quot;</span>[i == n];</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> t;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (t--) &#123;</span><br><span class="line">        <span class="built_in">solve</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="D1-Infinite-Sequence-Easy-Version"><a href="#D1-Infinite-Sequence-Easy-Version" class="headerlink" title="D1. Infinite Sequence (Easy Version)"></a>D1. Infinite Sequence (Easy Version)</h2><p> 手玩样例， 发现 7 = 8, 78 = 79……, 那么每对在 “^” 内（也就是除以二一样）的数字总是一样的，他们作为下一个数字的异或和的时候总是不做贡献，可以忽略。</p>
+<p>我们不妨补全给定的n数组，使得n总是奇数（这样下一位置开始时候总是出现两两相等情况）</p>
+<p>继续观察，发现</p>
+<ul>
+<li>当 x / 2是奇数时候，这时除了前n个给定的数字，其他总是两两成对出现， 此时 x = s[ n ] &amp; 1;</li>
+<li>当 x / 2是偶数的时候，除了x / 2,在n + 1到x / 2之间的所有数字都是成对出现，不参与计算，故 x = s[ n ] &amp; (x / 2),</li>
+</ul>
+<p>这样递归下去可以找到答案，最坏时间复杂度为o(logn);</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> i64 = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    i64 n, l, r;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; l &gt;&gt; r;</span><br><span class="line"></span><br><span class="line">    <span class="function">vector&lt;i64&gt; <span class="title">a</span><span class="params">(n + <span class="number">1</span>)</span>, <span class="title">s</span><span class="params">(n + <span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        cin &gt;&gt; a[i];</span><br><span class="line">        s[i] = s[i - <span class="number">1</span>] + a[i];</span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (n % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">        n++;</span><br><span class="line">        a.<span class="built_in">push_back</span>(s[n / <span class="number">2</span>] &amp; <span class="number">1</span>);</span><br><span class="line">        s.<span class="built_in">push_back</span>(s[n - <span class="number">1</span>] + a[n]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> f = [&amp;](<span class="keyword">auto</span> self, i64 x) -&gt; <span class="type">int</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (x &lt;= n) &#123;</span><br><span class="line">            <span class="keyword">return</span> a[x];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (x / <span class="number">2</span> &lt;= n) &#123;</span><br><span class="line">            <span class="keyword">return</span> (s[x / <span class="number">2</span>] &amp; <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> g;</span><br><span class="line">        <span class="keyword">if</span> ((((x / <span class="number">2</span>) - n) &amp; <span class="number">1</span>)) &#123;</span><br><span class="line">            g = <span class="built_in">self</span>(self, x / <span class="number">2</span>) ^ (s[n] &amp; <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            g = (s[n] &amp; <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> g;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// if (l &lt;= n * 2) &#123;</span></span><br><span class="line">    <span class="comment">//     for (int i = n + 1; i &lt;= l; i++) &#123;</span></span><br><span class="line">    <span class="comment">//         a.push_back(s[i / 2] &amp; 1);</span></span><br><span class="line">    <span class="comment">//         s.push_back(a[i] + s[i - 1]);</span></span><br><span class="line">    <span class="comment">//     &#125;</span></span><br><span class="line">    <span class="comment">//     cout &lt;&lt; a[l] &lt;&lt; &#x27;\n&#x27;;</span></span><br><span class="line">    <span class="comment">//     return;</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="built_in">f</span>(f, l) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> t;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(t--) &#123;</span><br><span class="line">        <span class="built_in">solve</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>codeforce题解</category>
+      </categories>
+      <tags>
+        <tag>codeforce</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git简单使用</title>
+    <url>/2025/03/01/git%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<ul>
+<li><h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><ul>
+<li>直接 <code>git init</code>将对应目录下一个文件夹变成git仓库</li>
+<li>使用<code>git clone</code>从github上克隆一个已经有的项目到指定文件夹<blockquote>
+<p>检查.git文件创建成功，不能直接ls，因为ls不会显示》.git 得使用ls -a显示</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><h3 id="git仓库包括两种"><a href="#git仓库包括两种" class="headerlink" title="git仓库包括两种:"></a>git仓库包括两种:</h3><ul>
+<li>本地仓库</li>
+<li>远程仓库</li>
+</ul>
+</li>
+<li><p>commit : 提交，将本地文件和版本信息保存到本地仓库</p>
+</li>
+<li>push: 推送，将本地仓库和版本信息提交到远程仓库</li>
+<li>pull : 拉取，将远程仓库文件和版本信息下载到本地文件</li>
+</ul>
+<hr>
+<ul>
+<li>git GUI : 图形界面</li>
+</ul>
+<hr>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><blockquote>
+<p>使用git</p>
+</blockquote>
+<h4 id="1-全局设置"><a href="#1-全局设置" class="headerlink" title="1. 全局设置"></a>1. 全局设置</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name 你的名字</span><br><span class="line">git confih --global user.email 你的邮箱</span><br></pre></td></tr></table></figure>
+<p>查看配置信息:<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --list</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>上面设置的是git的初始化仓库，和github和gitee等的账号不一样</li>
+</ul>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><ul>
+<li>版本库：前面看到的.git隐藏文件夹就是版本库，版本库中储存了配置信息，日志文件，版本信息等</li>
+<li>工作区： 包含.git文件夹目录的工作区，也称为工作目录，主要用于存放代码</li>
+<li>暂存区： .git文件夹有很多文件，其中一个index文件就是暂存区，也可以叫做stage，是一个临时保存文件的地方</li>
+</ul>
+<p>工作区 ——&gt; (git add) 暂存区 ——-&gt;(git commit)版本库</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git add 文件 //支持多个文件同时加入</span><br></pre></td></tr></table></figure></h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git commit -m &#x27;输入提示语&#x27; 文件名字</span><br></pre></td></tr></table></figure>
+<h3 id="工作区文件状态"><a href="#工作区文件状态" class="headerlink" title="工作区文件状态"></a>工作区文件状态</h3><blockquote>
+<p>git文件工作区分两个状态</p>
+</blockquote>
+<ul>
+<li>untracked 未跟踪(未被纳入版本库)</li>
+<li>tracked     已被跟踪(纳入版本控制)<br>  1)Unmodified 未被修改状态<br>  2）Modified   已被修改状态<br>  3）Staged      已暂存状态<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git status // 查看当前工作区的状态</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<ul>
+<li>git reset<br>1.把暂存区的东西放回工作区<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset + 文件//取消对文件的跟踪（从暂存区取消暂存，返回工作区）</span><br></pre></td></tr></table></figure>
+2.回退版本(通过git log 查看版本号)<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard 版本号</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>git commit将暂存区的内容提交到版本库<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git commit -m &#x27;你这一次提交的修改内容&#x27; 你要提交或者修改了的文件</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="远程仓库操作"><a href="#远程仓库操作" class="headerlink" title="远程仓库操作"></a>远程仓库操作</h3><p><code>git remote//查看远程仓库</code><br><code>git remote -v//查看详细信息</code></p>
+<ul>
+<li><p>添加远程仓库</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add &lt;short name&gt; &lt;url&gt; //short_name一般是origin</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>推送：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push [remote_name] [branch_name] // 一般remote用origin代替</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="分支操作"><a href="#分支操作" class="headerlink" title="分支操作"></a>分支操作</h3><ul>
+<li>git branch 查看分支</li>
+<li>git branch [ name ] 创建分支</li>
+<li>git checkout [name] 切换分支</li>
+<li>git push [short_name】[name]  推送到远程仓库</li>
+<li>git merge [name] 合并分支(把指定代码合并到当前分支)</li>
+<li>git branch -d [name] 删除分支</li>
+</ul>
+<h4 id="分支查看："><a href="#分支查看：" class="headerlink" title="分支查看："></a>分支查看：</h4><ul>
+<li>git branch 列出所有本地分支</li>
+<li>git branch -r 列出所有远程分支</li>
+<li>git branch -a 列出所有本地分支和远程分支</li>
+</ul>
+<hr>
+<blockquote>
+<p>标签</p>
+</blockquote>
+<ul>
+<li>git tag 列出已有的标签</li>
+<li>git tag [name] 创建标签</li>
+<li>git push [short_name] 【name] 将标签推送到远程仓库</li>
+<li>git checkout -b [branch] 【name] 检出标签</li>
+</ul>
+<h3 id="查看最后一次使用某个文件的某人"><a href="#查看最后一次使用某个文件的某人" class="headerlink" title="查看最后一次使用某个文件的某人"></a>查看最后一次使用某个文件的某人</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git log -x 文件名</span><br></pre></td></tr></table></figure>
+<ul>
+<li>-x是第几次</li>
+</ul>
+<h3 id="查看修改摩尔个文件中的collections时的提交信息"><a href="#查看修改摩尔个文件中的collections时的提交信息" class="headerlink" title="查看修改摩尔个文件中的collections时的提交信息"></a>查看修改摩尔个文件中的collections时的提交信息</h3><p>git blame , git show<br>或者使用git log</p>
+<ul>
+<li><code>git config</code>: Git 是一个 <a href="https://git-scm.com/docs/git-config">高度可定制的</a> 工具</li>
+<li><code>git clone --depth=1</code>: 浅克隆（shallow clone），不包括完整的版本历史信息</li>
+<li><code>git add -p</code>: 交互式暂存</li>
+<li><code>git rebase -i</code>: 交互式变基</li>
+<li><code>git blame</code>: 查看最后修改某行的人</li>
+<li><code>git stash</code>: 暂时移除工作目录下的修改内容</li>
+<li><code>git bisect</code>: 通过二分查找搜索历史记录</li>
+<li><code>.gitignore</code>: <a href="https://git-scm.com/docs/gitignore">指定</a> 故意不追踪的文件</li>
+</ul>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaData类学习</title>
+    <url>/2025/02/27/JavaData%E7%B1%BB%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<ul>
+<li>Java的DATA类</li>
+</ul>
+<h2 id="Date类的概述"><a href="#Date类的概述" class="headerlink" title="Date类的概述"></a>Date类的概述</h2><ol>
+<li><p>java.util,Date 表示日期和时间的类</p>
+</li>
+<li><p>类 Date 表示特定的瞬间，精确到千分之一秒（毫秒）</p>
+</li>
+<li><p>实例引入：获取时间原点到当前系统时间经历了多少秒</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    <span class="comment">// 时间原点：1970 年 01 月 01 日 00:00:00 </span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoDate</span> &#123;    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;       </span><br><span class="line">            System.out.println(System.currentTimeMillis());    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;       </span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="Date类常用的构造方法和成员方法"><a href="#Date类常用的构造方法和成员方法" class="headerlink" title="Date类常用的构造方法和成员方法"></a>Date类常用的构造方法和成员方法</h2><h3 id="成员方法"><a href="#成员方法" class="headerlink" title="成员方法"></a>成员方法</h3><p>getTime()方法。返回：时间原点以来，此Date对象表示的毫秒数</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Date; </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoGetTime</span> &#123;    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;        </span><br><span class="line">        <span class="type">Date</span> <span class="variable">date</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>();        </span><br><span class="line">        <span class="type">long</span> <span class="variable">time</span> <span class="operator">=</span> date.getTime();                <span class="comment">// 输出：1578728202850       </span></span><br><span class="line">     <span class="comment">// 该方法类似于 System.currentTimeMillis()        </span></span><br><span class="line">         System.out.println(time);   </span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><h4 id="Date类的无参构造方法。"><a href="#Date类的无参构造方法。" class="headerlink" title="Date类的无参构造方法。"></a>Date类的无参构造方法。</h4><p>返回：当前系统的日期和时间</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoDate1</span> &#123;    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;       </span><br><span class="line">         <span class="type">Date</span> <span class="variable">date</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>();         <span class="comment">// 输出：Sat Jan 11 15:40:50 CST 2020      </span></span><br><span class="line">        System.out.println(date);    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Date类的带参构造方法"><a href="#Date类的带参构造方法" class="headerlink" title="Date类的带参构造方法"></a>Date类的带参构造方法</h4><p>Date(long date) 参数为一个毫秒值，把传入的毫秒值转换为Date日期</p>
+<p>返回：传入参数（毫秒值）对应的的日期和时间</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Date; </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoDate2</span> &#123;   </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;        </span><br><span class="line">        <span class="type">Date</span> <span class="variable">date</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>(<span class="number">0L</span>);         <span class="comment">// 这里输出的是0毫秒时的日期和时间，即时间原点的日期和时间        // 输出：Thu Jan 01 08:00:00 CST 1970        </span></span><br><span class="line">        System.out.println(date);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="DateFormat抽象类和SimpleDateFormat实现类"><a href="#DateFormat抽象类和SimpleDateFormat实现类" class="headerlink" title="DateFormat抽象类和SimpleDateFormat实现类"></a>DateFormat抽象类和SimpleDateFormat实现类</h2><h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><ol>
+<li><p>java.text.DateFormat类，是日期/时间格式化子类的抽象类</p>
+</li>
+<li><p>作用：格式化(也就是日期-&gt;文本)、解析(文本-&gt;日期)</p>
+</li>
+<li><p>成员方法</p>
+<ol>
+<li>string format( Datedate)按照指定的模式,把Date日期,格式化为符合模式的字符串</li>
+<li>Date parse( string source)把符合模式的字符串,解析为Dote日期</li>
+</ol>
+</li>
+<li><p>DateFormat类是一个抽象类,无法直接创建对象使用，可以使用 DateFormat类的子类<strong>java.text.SimpleDateFormat extends DateFormat</strong></p>
+</li>
+<li><p>构造方法：<strong>SimpleDateFormat(String pattern)</strong>用给定的模式和默认语言环境的日期格式符号构造SimpleDateFormat</p>
+</li>
+</ol>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><ol>
+<li><p>测试DateFormat类的format方法，输出指定格式的日期、时间</p>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.text.SimpleDateFormat;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo01FormatMethod</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 创建SimpleDateFormat对象，在SimpleDateFormat(String pattern)构造方法中传入指定的模式</span></span><br><span class="line">        <span class="type">SimpleDateFormat</span> <span class="variable">simpleDateFormat</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(<span class="string">&quot;yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒&quot;</span>);</span><br><span class="line"> </span><br><span class="line">        <span class="comment">// 调用DateFormat的实现类SimpleDateFormat中的format方法，</span></span><br><span class="line">        <span class="comment">// 按照构造方法中指定的模式，把Date解析为符合模式的字符串（文本）</span></span><br><span class="line">        <span class="type">Date</span> <span class="variable">date</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>();</span><br><span class="line">        <span class="type">String</span> <span class="variable">dateFormat</span> <span class="operator">=</span> simpleDateFormat.format(date);</span><br><span class="line"> </span><br><span class="line">        <span class="comment">// Sat Jan 11 16:24:43 CST 2020</span></span><br><span class="line">        System.out.println(date);</span><br><span class="line">        <span class="comment">// 2020 年 01 月 11 日 16 时 24 分 43 秒</span></span><br><span class="line">        System.out.println(dateFormat);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试DateFormat类的parse方法，把符合构造方法中模式的字符串，解析为Date日期</p>
+</li>
+</ol>
+<pre><code class="lang-java">import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Demo01ParseMethod &#123;
+    public static void main(String[] args)
+            throws ParseException &#123;
+        // 创建SimpleDateFormat对象，在SimpleDateFormat(String pattern)构造方法中传入指定的模式
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(&quot;yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒&quot;);
+
+        // 调用 SimpleDateFormat对象中的 parse方法，把符合构SimpleDateFormat(String pattern)造方法中模式的字符串，解析为Date日期
+        Date dateParse = simpleDateFormat.parse(&quot;2020 年 01 月 11 日 16 时 24 分 43 秒&quot;);
+
+        // Sat Jan 11 16:24:43 CST 2020
+        System.out.println(dateParse);
+    &#125;
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>Java学习</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TCP / UDP</title>
+    <url>/2024/12/26/hehehe/</url>
+    <content><![CDATA[<ul>
+<li>OSI七层网络模型</li>
+</ul>
+<p>从下往上 ： 物理层， 数据链路层，网络层，运输层， 会话层，表示层，应用层</p>
+<ul>
+<li>TCP/ IP</li>
+</ul>
+<h3 id="网络协议是什么"><a href="#网络协议是什么" class="headerlink" title="网络协议是什么"></a><a href="https://so.csdn.net/so/search?q=%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE&amp;spm=1001.2101.3001.7020">网络协议</a>是什么</h3><ul>
+<li>在计算机网络要做到井井有条的交换数据，就必须遵守一些事先约定好的规则，比如交换数据的格式、是否需要发送一个应答信息。这些规则被称为网络协议。</li>
+</ul>
+<h3 id="为什么要对网络协议分层"><a href="#为什么要对网络协议分层" class="headerlink" title="为什么要对网络协议分层"></a>为什么要对网络协议分层</h3><ul>
+<li>简化问题难度和复杂度。由于各层之间独立，我们可以分割大问题为小问题。</li>
+<li>灵活性好。当其中一层的技术变化时，只要层间接口关系保持不变，其他层不受影响。</li>
+<li>易于实现和维护。</li>
+<li>促进标准化工作。分开后，每层功能可以相对简单地被描述![[OSI.png]]</li>
+</ul>
+<p><strong>1、UDP 和 TCP 的特点与区别</strong></p>
+<p><strong>用户数据报协议 UDP（User Datagram Protocol）</strong></p>
+<p>是无连接的，尽最大可能交付，没有拥塞控制，面向报文（对于应用程序传下来的报文不合并也不拆分，只是添加 UDP 首部），支持一对一、一对多、多对一和多对多的交互通信。</p>
+<p><strong>传输控制协议 TCP（Transmission Control Protocol）</strong></p>
+<p>是面向连接的，提供可靠交付，有流量控制，拥塞控制，提供全双工通信，面向字节流（把应用层传下来的报文看成字节流，把字节流组织成大小不等的数据块），每一条 TCP 连接只能是点对点的（一对一）。</p>
+<p><strong>TCP拥塞控制</strong>是<a href="https://zh.wikipedia.org/wiki/%E4%BC%A0%E8%BE%93%E6%8E%A7%E5%88%B6%E5%8D%8F%E8%AE%AE" title="传输控制协议">传输控制协议</a>（英语：Transmission Control Protocol，缩写TCP）避免网络拥塞的算法，是<a href="https://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%94%E7%BD%91" title="互联网">互联网</a>上主要的一个<a href="https://zh.wikipedia.org/wiki/%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6" title="拥塞控制">拥塞控制</a>措施。它使用一套基于<a href="https://zh.wikipedia.org/wiki/%E5%92%8C%E6%80%A7%E5%A2%9E%E9%95%BF/%E4%B9%98%E6%80%A7%E9%99%8D%E4%BD%8E" title="和性增长/乘性降低">线增积减模式</a>的多样化网络拥塞控制方法（包括慢启动和拥塞窗口等模式）来控制拥塞。<a href="https://zh.wikipedia.org/zh-cn/TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6#cite_note-1">[1]</a><a href="https://zh.wikipedia.org/zh-cn/TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6#cite_note-2">[2]</a><a href="https://zh.wikipedia.org/zh-cn/TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6#cite_note-3">[3]</a><a href="https://zh.wikipedia.org/zh-cn/TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6#cite_note-4">[4]</a><a href="https://zh.wikipedia.org/zh-cn/TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6#cite_note-5">[5]</a>在互联网上应用中有相当多的具体实现算法。</p>
+<p>![[{3B980C8E-4290-4775-9A0E-701F2F915A2F}.png]]![[{C2356D64-8E5C-4E3A-A3A8-E8D6517C3212}.png]]</p>
+<p>TCP结构：<br>序号 :</p>
+<p>确认号： </p>
+<p>数据偏移：</p>
+<p><strong>控制位：</strong>八位从左到右分别是 CWR，ECE，URG，ACK，PSH，RST，SYN，FIN。</p>
+<p><strong>CWR：</strong>CWR 标志与后面的 ECE 标志都用于 IP 首部的 ECN 字段，ECE 标志为 1 时，则通知对方已将拥塞窗口缩小；</p>
+<p><strong>ECE：</strong>若其值为 1 则会通知对方，从对方到这边的网络有阻塞。在收到数据包的 IP 首部中 ECN 为 1 时将 TCP 首部中的 ECE 设为 1；</p>
+<p><strong>URG：</strong>该位设为 1，表示包中有需要紧急处理的数据，对于需要紧急处理的数据，与后面的紧急指针有关；</p>
+<p><strong>ACK：</strong>该位设为 1，确认应答的字段有效，TCP规定除了最初建立连接时的 SYN 包之外该位必须设为 1；</p>
+<p><strong>PSH：</strong>该位设为 1，表示需要将收到的数据立刻传给上层应用协议，若设为 0，则先将数据进行缓存；</p>
+<p><strong>RST：</strong>该位设为 1，表示 TCP 连接出现异常必须强制断开连接；</p>
+<p><strong>SYN：</strong>用于建立连接，该位设为 1，表示希望建立连接，并在其序列号的字段进行序列号初值设定；</p>
+<p><strong>FIN：</strong>该位设为 1，表示今后不再有数据发送，希望断开连接。当通信结束希望断开连接时，通信双方的主机之间就可以相互交换 FIN 位置为 1 的 TCP 段。</p>
+<p>每个主机又对对方的 FIN 包进行确认应答之后可以断开连接。不过，主机收到 FIN 设置为 1 的 TCP 段之后不必马上回复一个 FIN 包，而是可以等到缓冲区中的所有数据都因为已成功发送而被自动删除之后再发 FIN 包；</p>
+<p><strong>窗口：</strong>窗口值作为接收方让发送方设置其发送窗口的依据。之所以要有这个限制，是因为接收方的数据缓存空间是有限的。</p>
+<h2 id="TCP三次握手"><a href="#TCP三次握手" class="headerlink" title="TCP三次握手"></a>TCP三次握手</h2><ul>
+<li><p>第一次 从发送方主机  -&gt; 接收方主机<br>ACK = 0, SYN = 1; 选择一个序列号 Seq = x</p>
+</li>
+<li><p>第二次 从接收方主机 -&gt; 发送方主机<br>ACK = 1, SYN = 1; 返回Seq = x + 1同时选择一个序列号 ACKnum = y</p>
+</li>
+<li><p>第三次， 从发送方主机 -&gt; 接受方主机<br>ACK = 1; ACKnum = y + 1</p>
+</li>
+</ul>
+<p>建立连接</p>
+<blockquote>
+<p>使用TCP三次握手的原因</p>
+<ul>
+<li>确认双方的发送和接收消息的能力是正常的</li>
+</ul>
+</blockquote>
+<p>注意到建立连接一般是 三次握手 </p>
+<h2 id="TCP的四次挥手"><a href="#TCP的四次挥手" class="headerlink" title="TCP的四次挥手"></a>TCP的四次挥手</h2><ul>
+<li><p>第一次 从发送方 -&gt; 接送方主机<br>FIN = 1， Seq = x</p>
+</li>
+<li><p>第二次 从接收方 -&gt; 发送方<br>ACK = 1， ACKnum = x + 1;</p>
+</li>
+</ul>
+<hr>
+<pre><code>中间有一段服务端确认（CLOSEWAIT）， 等待 服务端 所有 传输剩下的报文段发送完毕 
+</code></pre><ul>
+<li><p>第三次 从接收方 -&gt; 发送方<br>FIN = 1， Seq = y</p>
+</li>
+<li><p>第四次 从发送方 -&gt; 接收方</p>
+</li>
+</ul>
+<hr>
+<pre><code>之后是客户端的TIME_WAIT， 等待 2 MSL （报文段最大存活时间）后关闭连接
+</code></pre><h2 id="TCP-短连接和长连接的区别"><a href="#TCP-短连接和长连接的区别" class="headerlink" title="TCP 短连接和长连接的区别"></a><strong>TCP 短连接和长连接的区别</strong></h2><p><strong>短连接：</strong>Client 向 Server 发送消息，Server 回应 Client，然后一次读写就完成了，这时候双方任何一个都可以发起 close 操作，不过一般都是 Client 先发起 close 操作。短连接一般只会在 Client/Server 间传递一次读写操作。</p>
+<p>短连接的优点：管理起来比较简单，建立存在的连接都是有用的连接，不需要额外的控制手段。</p>
+<p><strong>长连接：</strong>Client 与 Server 完成一次读写之后，它们之间的连接并不会主动关闭，后续的读写操作会继续使用这个连接。</p>
+<p>在长连接的应用场景下，Client 端一般不会主动关闭它们之间的连接，Client 与 Server 之间的连接如果一直不关闭的话，随着客户端连接越来越多，Server 压力也越来越大，这时候 Server 端需要采取一些策略，如关闭一些长时间没有读写事件发生的连接，这样可以避免一些恶意连接导致 Server 端服务受损；如果条件再允许可以以客户端为颗粒度，限制每个客户端的最大长连接数，从而避免某个客户端连累后端的服务。</p>
+<h3 id="粘包和拆包"><a href="#粘包和拆包" class="headerlink" title="粘包和拆包"></a>粘包和拆包</h3><ul>
+<li>粘包 ： 在从 客户端 到 服务端过程中两个包连在一起 叫做粘包</li>
+<li>拆包 ： ————————————————————————-之后还拆分成两个与原来不同的数据段叫做拆包</li>
+</ul>
+<blockquote>
+<p>什么时候发生粘包和拆包？<br>    答案 : </p>
+<pre><code>1. 在发送的数据超过TCP缓冲区最大空间时候可能发生拆包
+2. 发送的数据大于MSS（最大报文长度）， 发生拆包
+3. 发送的数据小于TCP缓冲区最小空间可能发生粘包
+4. 接受数据端应用层没有及时读取缓冲区的数据
+</code></pre></blockquote>
+<p>粘包拆包解决办法 : </p>
+<ul>
+<li><strong>消息定长</strong> ： 每个数据包固定长度（不够的拿0去填补），这样接收端每次接受的都是固定长度的数据，就可以分开</li>
+<li><strong>设置消息边界</strong> ： 服务端在接受时候， 按照分割边界把消息分割， 如 FTP协议（通过设置一个换行符）</li>
+</ul>
+<h3 id="TCP的可靠传输"><a href="#TCP的可靠传输" class="headerlink" title="TCP的可靠传输"></a>TCP的可靠传输</h3><blockquote>
+<p>TCP采用超时重传实现可靠传输 ： 当某一个信息发送后在超时时间内没有收到确认就重传这个报文段（从发送到接受的时间是RTT， 可以自己计算）</p>
+</blockquote>
+<h3 id="TCP滑动窗口"><a href="#TCP滑动窗口" class="headerlink" title="TCP滑动窗口"></a>TCP滑动窗口</h3><blockquote>
+<p>TCP发送窗口， 和接受窗口内的数据段都是可接受或者可以发送的，当发送方的某个报文段已经被确认后， 窗口会向右移动一段距离， 更新可以接受和被接受的报文段</p>
+</blockquote>
+<h3 id="TCP的流量控制"><a href="#TCP的流量控制" class="headerlink" title="TCP的流量控制"></a>TCP的流量控制</h3><blockquote>
+<p>TCP通过控制窗口大小实现流量的控制<br>为了避免发送不出数据， 接收方会时不时发送一个 <strong>窗口探测</strong> 的数据段（只包含一个字节）来确定最新的窗口大小</p>
+</blockquote>
+<h2 id="TCP的拥塞控制"><a href="#TCP的拥塞控制" class="headerlink" title="TCP的拥塞控制"></a>TCP的拥塞控制</h2><blockquote>
+<p><strong>主要通过四个算法</strong>：慢开始，拥塞避免，快重传，快恢复</p>
+</blockquote>
+<p>维护一个拥塞窗口（cwnd），注意道拥塞窗口只是一个状态变量</p>
+<p>假设接收方有足够大的接收窗口，窗口的大小为报文段</p>
+<ul>
+<li><p>慢开始和拥塞避免</p>
+<pre><code> 最开始执行满开始，让cwnd = 1，之后每当接受确认，就倍增 2 4 8 ....再设置一个慢开始门限ssthresh，当慢开始大于这个门限的时候进入拥塞避免，每个轮次让cwnd + 1
+ 1   
+ 如果出现了超时，就另慢开始门限 = cwnd / 2，重新开始慢开始
+</code></pre></li>
+<li><p>快重传和快恢复</p>
+<pre><code>  接收方每次接收报文都应该对最后一次收到的报文进行确认，例如收到了B1， B2， B4
+  则在收到B2时候要对B1确认，B4时候要对B2确认
+  当发送方重复收到3次接收方发来的某个相同的报文的确认时，立即执行快重传（因为这时候知道有报文丢失），在这种情况下是报文段的丢失，不是网络拥塞，所以直接执行快恢复，让慢开始上限（ssthresh）= 拥塞窗口（cwnd） / 2；注意此时直接进入拥塞避免
+</code></pre></li>
+</ul>
+<blockquote>
+<p>注意 慢开始和快恢复的慢和快指的是cwnd的设定值，慢开始cwnd设置成1，快开始cwnd设置成ssthresh</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>计算机网络</category>
+      </categories>
   </entry>
   <entry>
     <title>HTML</title>
@@ -474,333 +799,13 @@ $$
       </tags>
   </entry>
   <entry>
-    <title>Educational codeforceRound 173 题解</title>
-    <url>/2024/12/26/Educational-codeforceRound-173-%E9%A2%98%E8%A7%A3/</url>
-    <content><![CDATA[<h2 id="A"><a href="#A" class="headerlink" title="A"></a>A</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="B"><a href="#B" class="headerlink" title="B"></a>B</h2><h2 id="C"><a href="#C" class="headerlink" title="C"></a>C</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> i64 = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"><span class="keyword">constexpr</span> i64 inf = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">tuple&lt;T, T, T&gt; <span class="title">MaxArray</span><span class="params">(<span class="type">const</span> vector&lt;T&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (nums.<span class="built_in">size</span>() == <span class="number">1</span>) <span class="keyword">return</span> &#123;<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    T cur = nums[<span class="number">1</span>], maxp = nums[<span class="number">1</span>];      </span><br><span class="line">    <span class="type">int</span> start = <span class="number">1</span>;              </span><br><span class="line">    <span class="type">int</span> le = <span class="number">1</span>;        </span><br><span class="line">    <span class="type">int</span> ri = <span class="number">1</span>;            </span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt; nums.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (cur + nums[i] &lt; nums[i]) &#123;</span><br><span class="line">            cur = nums[i];</span><br><span class="line">            start = i;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            cur += nums[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (cur &gt; maxp) &#123;</span><br><span class="line">            maxp = cur;</span><br><span class="line">            le = start; </span><br><span class="line">            ri = i;       </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;le, ri, maxp&#125;; </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line"></span><br><span class="line">    <span class="function">vector&lt;i64&gt; <span class="title">a</span><span class="params">(n + <span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="type">int</span> pos = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        cin &gt;&gt; a[i];</span><br><span class="line">        <span class="keyword">if</span> (a[i] != <span class="number">1</span> &amp;&amp; a[i] != <span class="number">-1</span>) &#123;</span><br><span class="line">            pos = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (pos == <span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="keyword">auto</span> [x, y, z] = <span class="built_in">MaxArray</span>&lt;i64&gt; (a);</span><br><span class="line">        i64 tp = <span class="built_in">max</span>(<span class="number">0LL</span>, z);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            a[i] = -a[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">auto</span> [h, j, p] = <span class="built_in">MaxArray</span>&lt;i64&gt; (a);</span><br><span class="line"></span><br><span class="line">        i64 kp = <span class="built_in">max</span>(<span class="number">0LL</span>, p);</span><br><span class="line">        kp = -kp;</span><br><span class="line"></span><br><span class="line">        cout &lt;&lt; tp - kp + <span class="number">1</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = kp; i &lt;= tp; i++) &#123;</span><br><span class="line">            cout &lt;&lt; i &lt;&lt; <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">vector&lt;i64&gt; <span class="title">l</span><span class="params">(<span class="number">1</span>)</span>, <span class="title">r</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; pos; i++) &#123;</span><br><span class="line">        l.<span class="built_in">push_back</span>(a[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = pos + <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        r.<span class="built_in">push_back</span>(a[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> [x, y, z] = <span class="built_in">MaxArray</span>(l);</span><br><span class="line">    z = <span class="built_in">max</span>(<span class="number">0LL</span>, z);</span><br><span class="line">    i64 lmax = z;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= l.<span class="built_in">size</span>() - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        l[i] = -l[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> [p, u, b] = <span class="built_in">MaxArray</span>(l);</span><br><span class="line">    b = <span class="built_in">max</span>(<span class="number">0LL</span>, b);</span><br><span class="line">    i64 lmin = -b;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> [gg, ee, f] = <span class="built_in">MaxArray</span>(r);</span><br><span class="line">    f = <span class="built_in">max</span>(<span class="number">0LL</span>, f);</span><br><span class="line">    i64 rmax = f;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= r.<span class="built_in">size</span>() - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        r[i] = -r[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> [ioi, powp, w] = <span class="built_in">MaxArray</span>(r);</span><br><span class="line">    w = <span class="built_in">max</span>(w, <span class="number">0LL</span>);</span><br><span class="line">    i64 rmin = -w;</span><br><span class="line"></span><br><span class="line">    set&lt;i64&gt; is;</span><br><span class="line">    <span class="keyword">for</span> (i64 i = <span class="built_in">min</span>(rmin, lmin); i &lt;= <span class="number">0</span>; i++) &#123;</span><br><span class="line">        is.<span class="built_in">insert</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt;= <span class="built_in">max</span>(lmax, rmax); i++) &#123;</span><br><span class="line">        is.<span class="built_in">insert</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    i64 sum = <span class="number">0</span>;</span><br><span class="line">    i64 mp = <span class="number">0</span>;</span><br><span class="line">    i64 mi = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = pos + <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        sum += a[i];</span><br><span class="line">        mp = <span class="built_in">max</span>(<span class="number">0LL</span>, <span class="built_in">max</span>(mp, sum));</span><br><span class="line">        mi = <span class="built_in">min</span>(<span class="number">0LL</span>, <span class="built_in">min</span>(mi, sum));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    i64 mmp = <span class="number">0</span>, mmi = <span class="number">0</span>;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (i64 i = pos - <span class="number">1</span>; i &gt;= <span class="number">1</span>; i--) &#123;</span><br><span class="line">        sum += a[i];</span><br><span class="line">        mmp = <span class="built_in">max</span>(<span class="number">0LL</span>, <span class="built_in">max</span>(mmp, sum));</span><br><span class="line">        mmi = <span class="built_in">min</span>(<span class="number">0LL</span>, <span class="built_in">min</span>(mmi, sum));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    i64 tminp = mmi + mi;</span><br><span class="line">    i64 tmaxp = mmp + mp;</span><br><span class="line">    <span class="comment">//cerr &lt;&lt; tminp &lt;&lt; &#x27; &#x27; &lt;&lt; tmaxp &lt;&lt; &#x27;\n&#x27;;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i64 i = a[pos] + tminp; i &lt;= a[pos] + tmaxp; i++) &#123;</span><br><span class="line">        is.<span class="built_in">insert</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; is.<span class="built_in">size</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> x : is) &#123;</span><br><span class="line">        cout &lt;&lt; x &lt;&lt; <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> t;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(t--) &#123;</span><br><span class="line">        <span class="built_in">solve</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> i64 = <span class="type">long</span> <span class="type">long</span>;</span><br><span class="line"><span class="keyword">constexpr</span> i64 inf = <span class="number">1e18</span> + <span class="number">9</span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    i64 l, r, g;</span><br><span class="line">    cin &gt;&gt; l &gt;&gt; r &gt;&gt; g;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (g &gt; r) &#123;</span><br><span class="line">        cout &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    i64 de = (l / g) + ((l % g) ? <span class="number">1</span> : <span class="number">0</span>);</span><br><span class="line">    i64 kp = (r / g);</span><br><span class="line">   <span class="comment">// cerr &lt;&lt; &quot;!:&quot; &lt;&lt; de &lt;&lt; &#x27; &#x27; &lt;&lt; kp &lt;&lt; &#x27;\n&#x27;;</span></span><br><span class="line">    <span class="keyword">if</span> (g == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (l == <span class="number">1</span>) &#123;</span><br><span class="line">            cout &lt;&lt; <span class="number">1</span> &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">1LL</span> * r &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (l == r) &#123;</span><br><span class="line">            cout &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        i64 maxp = <span class="number">0</span>;</span><br><span class="line">        i64 ll = l, rr = r;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i64 i = l; i &lt;= r; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (r - i &lt;= maxp) <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">for</span> (i64 j = r; j &gt;= l; j--) &#123;</span><br><span class="line">                <span class="keyword">if</span> (j - i &lt;= maxp) <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">gcd</span>(i, j) == <span class="number">1</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (j - i &gt; maxp) &#123;</span><br><span class="line">                        maxp = j - i, ll = i, rr = j;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        cout &lt;&lt; <span class="number">1LL</span> * ll &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">1LL</span> * rr &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (de &gt; kp) &#123;</span><br><span class="line">        cout &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (de == kp) &#123;</span><br><span class="line">        <span class="keyword">if</span> (de == <span class="number">1</span>) &#123;</span><br><span class="line">            cout &lt;&lt; g &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; g &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            cout &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">-1</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (de == <span class="number">1</span>) &#123;</span><br><span class="line">            cout &lt;&lt; g &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; <span class="number">1LL</span> * g * kp &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        i64 ll = de, rr = kp;</span><br><span class="line">        i64 maxp = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (i64 li = de; li &lt;= kp; li++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (kp - li &lt;= maxp) <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">for</span> (i64 j = kp; j &gt;= li; j--) &#123;</span><br><span class="line">                <span class="keyword">if</span> (j - li &lt;= maxp) <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">gcd</span>(j, li) == <span class="number">1</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (j - li &gt; maxp) &#123;</span><br><span class="line">                        maxp = j - li;</span><br><span class="line">                        rr = j, ll = li;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; ll * <span class="number">1LL</span> * g &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; rr * <span class="number">1LL</span> * g &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> t;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(t--) &#123;</span><br><span class="line">        <span class="built_in">solve</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>codeforce题解</category>
-      </categories>
-      <tags>
-        <tag>codeforce</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JavaData类学习</title>
-    <url>/2025/02/27/JavaData%E7%B1%BB%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<ul>
-<li>Java的DATA类</li>
-</ul>
-<h2 id="Date类的概述"><a href="#Date类的概述" class="headerlink" title="Date类的概述"></a>Date类的概述</h2><ol>
-<li><p>java.util,Date 表示日期和时间的类</p>
-</li>
-<li><p>类 Date 表示特定的瞬间，精确到千分之一秒（毫秒）</p>
-</li>
-<li><p>实例引入：获取时间原点到当前系统时间经历了多少秒</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    <span class="comment">// 时间原点：1970 年 01 月 01 日 00:00:00 </span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoDate</span> &#123;    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;       </span><br><span class="line">            System.out.println(System.currentTimeMillis());    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;       </span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="Date类常用的构造方法和成员方法"><a href="#Date类常用的构造方法和成员方法" class="headerlink" title="Date类常用的构造方法和成员方法"></a>Date类常用的构造方法和成员方法</h2><h3 id="成员方法"><a href="#成员方法" class="headerlink" title="成员方法"></a>成员方法</h3><p>getTime()方法。返回：时间原点以来，此Date对象表示的毫秒数</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Date; </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoGetTime</span> &#123;    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;        </span><br><span class="line">        <span class="type">Date</span> <span class="variable">date</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>();        </span><br><span class="line">        <span class="type">long</span> <span class="variable">time</span> <span class="operator">=</span> date.getTime();                <span class="comment">// 输出：1578728202850       </span></span><br><span class="line">     <span class="comment">// 该方法类似于 System.currentTimeMillis()        </span></span><br><span class="line">         System.out.println(time);   </span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><h4 id="Date类的无参构造方法。"><a href="#Date类的无参构造方法。" class="headerlink" title="Date类的无参构造方法。"></a>Date类的无参构造方法。</h4><p>返回：当前系统的日期和时间</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoDate1</span> &#123;    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;       </span><br><span class="line">         <span class="type">Date</span> <span class="variable">date</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>();         <span class="comment">// 输出：Sat Jan 11 15:40:50 CST 2020      </span></span><br><span class="line">        System.out.println(date);    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="Date类的带参构造方法"><a href="#Date类的带参构造方法" class="headerlink" title="Date类的带参构造方法"></a>Date类的带参构造方法</h4><p>Date(long date) 参数为一个毫秒值，把传入的毫秒值转换为Date日期</p>
-<p>返回：传入参数（毫秒值）对应的的日期和时间</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Date; </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoDate2</span> &#123;   </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;        </span><br><span class="line">        <span class="type">Date</span> <span class="variable">date</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>(<span class="number">0L</span>);         <span class="comment">// 这里输出的是0毫秒时的日期和时间，即时间原点的日期和时间        // 输出：Thu Jan 01 08:00:00 CST 1970        </span></span><br><span class="line">        System.out.println(date);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="DateFormat抽象类和SimpleDateFormat实现类"><a href="#DateFormat抽象类和SimpleDateFormat实现类" class="headerlink" title="DateFormat抽象类和SimpleDateFormat实现类"></a>DateFormat抽象类和SimpleDateFormat实现类</h2><h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><ol>
-<li><p>java.text.DateFormat类，是日期/时间格式化子类的抽象类</p>
-</li>
-<li><p>作用：格式化(也就是日期-&gt;文本)、解析(文本-&gt;日期)</p>
-</li>
-<li><p>成员方法</p>
-<ol>
-<li>string format( Datedate)按照指定的模式,把Date日期,格式化为符合模式的字符串</li>
-<li>Date parse( string source)把符合模式的字符串,解析为Dote日期</li>
-</ol>
-</li>
-<li><p>DateFormat类是一个抽象类,无法直接创建对象使用，可以使用 DateFormat类的子类<strong>java.text.SimpleDateFormat extends DateFormat</strong></p>
-</li>
-<li><p>构造方法：<strong>SimpleDateFormat(String pattern)</strong>用给定的模式和默认语言环境的日期格式符号构造SimpleDateFormat</p>
-</li>
-</ol>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><ol>
-<li><p>测试DateFormat类的format方法，输出指定格式的日期、时间</p>
- <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.text.SimpleDateFormat;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo01FormatMethod</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 创建SimpleDateFormat对象，在SimpleDateFormat(String pattern)构造方法中传入指定的模式</span></span><br><span class="line">        <span class="type">SimpleDateFormat</span> <span class="variable">simpleDateFormat</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(<span class="string">&quot;yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒&quot;</span>);</span><br><span class="line"> </span><br><span class="line">        <span class="comment">// 调用DateFormat的实现类SimpleDateFormat中的format方法，</span></span><br><span class="line">        <span class="comment">// 按照构造方法中指定的模式，把Date解析为符合模式的字符串（文本）</span></span><br><span class="line">        <span class="type">Date</span> <span class="variable">date</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>();</span><br><span class="line">        <span class="type">String</span> <span class="variable">dateFormat</span> <span class="operator">=</span> simpleDateFormat.format(date);</span><br><span class="line"> </span><br><span class="line">        <span class="comment">// Sat Jan 11 16:24:43 CST 2020</span></span><br><span class="line">        System.out.println(date);</span><br><span class="line">        <span class="comment">// 2020 年 01 月 11 日 16 时 24 分 43 秒</span></span><br><span class="line">        System.out.println(dateFormat);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>测试DateFormat类的parse方法，把符合构造方法中模式的字符串，解析为Date日期</p>
-</li>
-</ol>
-<pre><code class="lang-java">import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-public class Demo01ParseMethod &#123;
-    public static void main(String[] args)
-            throws ParseException &#123;
-        // 创建SimpleDateFormat对象，在SimpleDateFormat(String pattern)构造方法中传入指定的模式
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(&quot;yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒&quot;);
-
-        // 调用 SimpleDateFormat对象中的 parse方法，把符合构SimpleDateFormat(String pattern)造方法中模式的字符串，解析为Date日期
-        Date dateParse = simpleDateFormat.parse(&quot;2020 年 01 月 11 日 16 时 24 分 43 秒&quot;);
-
-        // Sat Jan 11 16:24:43 CST 2020
-        System.out.println(dateParse);
-    &#125;
-&#125;
-</code></pre>
-]]></content>
-      <categories>
-        <category>Java学习</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>TCP / UDP</title>
-    <url>/2024/12/26/hehehe/</url>
-    <content><![CDATA[<ul>
-<li>OSI七层网络模型</li>
-</ul>
-<p>从下往上 ： 物理层， 数据链路层，网络层，运输层， 会话层，表示层，应用层</p>
-<ul>
-<li>TCP/ IP</li>
-</ul>
-<h3 id="网络协议是什么"><a href="#网络协议是什么" class="headerlink" title="网络协议是什么"></a><a href="https://so.csdn.net/so/search?q=%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE&amp;spm=1001.2101.3001.7020">网络协议</a>是什么</h3><ul>
-<li>在计算机网络要做到井井有条的交换数据，就必须遵守一些事先约定好的规则，比如交换数据的格式、是否需要发送一个应答信息。这些规则被称为网络协议。</li>
-</ul>
-<h3 id="为什么要对网络协议分层"><a href="#为什么要对网络协议分层" class="headerlink" title="为什么要对网络协议分层"></a>为什么要对网络协议分层</h3><ul>
-<li>简化问题难度和复杂度。由于各层之间独立，我们可以分割大问题为小问题。</li>
-<li>灵活性好。当其中一层的技术变化时，只要层间接口关系保持不变，其他层不受影响。</li>
-<li>易于实现和维护。</li>
-<li>促进标准化工作。分开后，每层功能可以相对简单地被描述![[OSI.png]]</li>
-</ul>
-<p><strong>1、UDP 和 TCP 的特点与区别</strong></p>
-<p><strong>用户数据报协议 UDP（User Datagram Protocol）</strong></p>
-<p>是无连接的，尽最大可能交付，没有拥塞控制，面向报文（对于应用程序传下来的报文不合并也不拆分，只是添加 UDP 首部），支持一对一、一对多、多对一和多对多的交互通信。</p>
-<p><strong>传输控制协议 TCP（Transmission Control Protocol）</strong></p>
-<p>是面向连接的，提供可靠交付，有流量控制，拥塞控制，提供全双工通信，面向字节流（把应用层传下来的报文看成字节流，把字节流组织成大小不等的数据块），每一条 TCP 连接只能是点对点的（一对一）。</p>
-<p><strong>TCP拥塞控制</strong>是<a href="https://zh.wikipedia.org/wiki/%E4%BC%A0%E8%BE%93%E6%8E%A7%E5%88%B6%E5%8D%8F%E8%AE%AE" title="传输控制协议">传输控制协议</a>（英语：Transmission Control Protocol，缩写TCP）避免网络拥塞的算法，是<a href="https://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%94%E7%BD%91" title="互联网">互联网</a>上主要的一个<a href="https://zh.wikipedia.org/wiki/%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6" title="拥塞控制">拥塞控制</a>措施。它使用一套基于<a href="https://zh.wikipedia.org/wiki/%E5%92%8C%E6%80%A7%E5%A2%9E%E9%95%BF/%E4%B9%98%E6%80%A7%E9%99%8D%E4%BD%8E" title="和性增长/乘性降低">线增积减模式</a>的多样化网络拥塞控制方法（包括慢启动和拥塞窗口等模式）来控制拥塞。<a href="https://zh.wikipedia.org/zh-cn/TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6#cite_note-1">[1]</a><a href="https://zh.wikipedia.org/zh-cn/TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6#cite_note-2">[2]</a><a href="https://zh.wikipedia.org/zh-cn/TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6#cite_note-3">[3]</a><a href="https://zh.wikipedia.org/zh-cn/TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6#cite_note-4">[4]</a><a href="https://zh.wikipedia.org/zh-cn/TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6#cite_note-5">[5]</a>在互联网上应用中有相当多的具体实现算法。</p>
-<p>![[{3B980C8E-4290-4775-9A0E-701F2F915A2F}.png]]![[{C2356D64-8E5C-4E3A-A3A8-E8D6517C3212}.png]]</p>
-<p>TCP结构：<br>序号 :</p>
-<p>确认号： </p>
-<p>数据偏移：</p>
-<p><strong>控制位：</strong>八位从左到右分别是 CWR，ECE，URG，ACK，PSH，RST，SYN，FIN。</p>
-<p><strong>CWR：</strong>CWR 标志与后面的 ECE 标志都用于 IP 首部的 ECN 字段，ECE 标志为 1 时，则通知对方已将拥塞窗口缩小；</p>
-<p><strong>ECE：</strong>若其值为 1 则会通知对方，从对方到这边的网络有阻塞。在收到数据包的 IP 首部中 ECN 为 1 时将 TCP 首部中的 ECE 设为 1；</p>
-<p><strong>URG：</strong>该位设为 1，表示包中有需要紧急处理的数据，对于需要紧急处理的数据，与后面的紧急指针有关；</p>
-<p><strong>ACK：</strong>该位设为 1，确认应答的字段有效，TCP规定除了最初建立连接时的 SYN 包之外该位必须设为 1；</p>
-<p><strong>PSH：</strong>该位设为 1，表示需要将收到的数据立刻传给上层应用协议，若设为 0，则先将数据进行缓存；</p>
-<p><strong>RST：</strong>该位设为 1，表示 TCP 连接出现异常必须强制断开连接；</p>
-<p><strong>SYN：</strong>用于建立连接，该位设为 1，表示希望建立连接，并在其序列号的字段进行序列号初值设定；</p>
-<p><strong>FIN：</strong>该位设为 1，表示今后不再有数据发送，希望断开连接。当通信结束希望断开连接时，通信双方的主机之间就可以相互交换 FIN 位置为 1 的 TCP 段。</p>
-<p>每个主机又对对方的 FIN 包进行确认应答之后可以断开连接。不过，主机收到 FIN 设置为 1 的 TCP 段之后不必马上回复一个 FIN 包，而是可以等到缓冲区中的所有数据都因为已成功发送而被自动删除之后再发 FIN 包；</p>
-<p><strong>窗口：</strong>窗口值作为接收方让发送方设置其发送窗口的依据。之所以要有这个限制，是因为接收方的数据缓存空间是有限的。</p>
-<h2 id="TCP三次握手"><a href="#TCP三次握手" class="headerlink" title="TCP三次握手"></a>TCP三次握手</h2><ul>
-<li><p>第一次 从发送方主机  -&gt; 接收方主机<br>ACK = 0, SYN = 1; 选择一个序列号 Seq = x</p>
-</li>
-<li><p>第二次 从接收方主机 -&gt; 发送方主机<br>ACK = 1, SYN = 1; 返回Seq = x + 1同时选择一个序列号 ACKnum = y</p>
-</li>
-<li><p>第三次， 从发送方主机 -&gt; 接受方主机<br>ACK = 1; ACKnum = y + 1</p>
-</li>
-</ul>
-<p>建立连接</p>
-<blockquote>
-<p>使用TCP三次握手的原因</p>
-<ul>
-<li>确认双方的发送和接收消息的能力是正常的</li>
-</ul>
-</blockquote>
-<p>注意到建立连接一般是 三次握手 </p>
-<h2 id="TCP的四次挥手"><a href="#TCP的四次挥手" class="headerlink" title="TCP的四次挥手"></a>TCP的四次挥手</h2><ul>
-<li><p>第一次 从发送方 -&gt; 接送方主机<br>FIN = 1， Seq = x</p>
-</li>
-<li><p>第二次 从接收方 -&gt; 发送方<br>ACK = 1， ACKnum = x + 1;</p>
-</li>
-</ul>
-<hr>
-<pre><code>中间有一段服务端确认（CLOSEWAIT）， 等待 服务端 所有 传输剩下的报文段发送完毕 
-</code></pre><ul>
-<li><p>第三次 从接收方 -&gt; 发送方<br>FIN = 1， Seq = y</p>
-</li>
-<li><p>第四次 从发送方 -&gt; 接收方</p>
-</li>
-</ul>
-<hr>
-<pre><code>之后是客户端的TIME_WAIT， 等待 2 MSL （报文段最大存活时间）后关闭连接
-</code></pre><h2 id="TCP-短连接和长连接的区别"><a href="#TCP-短连接和长连接的区别" class="headerlink" title="TCP 短连接和长连接的区别"></a><strong>TCP 短连接和长连接的区别</strong></h2><p><strong>短连接：</strong>Client 向 Server 发送消息，Server 回应 Client，然后一次读写就完成了，这时候双方任何一个都可以发起 close 操作，不过一般都是 Client 先发起 close 操作。短连接一般只会在 Client/Server 间传递一次读写操作。</p>
-<p>短连接的优点：管理起来比较简单，建立存在的连接都是有用的连接，不需要额外的控制手段。</p>
-<p><strong>长连接：</strong>Client 与 Server 完成一次读写之后，它们之间的连接并不会主动关闭，后续的读写操作会继续使用这个连接。</p>
-<p>在长连接的应用场景下，Client 端一般不会主动关闭它们之间的连接，Client 与 Server 之间的连接如果一直不关闭的话，随着客户端连接越来越多，Server 压力也越来越大，这时候 Server 端需要采取一些策略，如关闭一些长时间没有读写事件发生的连接，这样可以避免一些恶意连接导致 Server 端服务受损；如果条件再允许可以以客户端为颗粒度，限制每个客户端的最大长连接数，从而避免某个客户端连累后端的服务。</p>
-<h3 id="粘包和拆包"><a href="#粘包和拆包" class="headerlink" title="粘包和拆包"></a>粘包和拆包</h3><ul>
-<li>粘包 ： 在从 客户端 到 服务端过程中两个包连在一起 叫做粘包</li>
-<li>拆包 ： ————————————————————————-之后还拆分成两个与原来不同的数据段叫做拆包</li>
-</ul>
-<blockquote>
-<p>什么时候发生粘包和拆包？<br>    答案 : </p>
-<pre><code>1. 在发送的数据超过TCP缓冲区最大空间时候可能发生拆包
-2. 发送的数据大于MSS（最大报文长度）， 发生拆包
-3. 发送的数据小于TCP缓冲区最小空间可能发生粘包
-4. 接受数据端应用层没有及时读取缓冲区的数据
-</code></pre></blockquote>
-<p>粘包拆包解决办法 : </p>
-<ul>
-<li><strong>消息定长</strong> ： 每个数据包固定长度（不够的拿0去填补），这样接收端每次接受的都是固定长度的数据，就可以分开</li>
-<li><strong>设置消息边界</strong> ： 服务端在接受时候， 按照分割边界把消息分割， 如 FTP协议（通过设置一个换行符）</li>
-</ul>
-<h3 id="TCP的可靠传输"><a href="#TCP的可靠传输" class="headerlink" title="TCP的可靠传输"></a>TCP的可靠传输</h3><blockquote>
-<p>TCP采用超时重传实现可靠传输 ： 当某一个信息发送后在超时时间内没有收到确认就重传这个报文段（从发送到接受的时间是RTT， 可以自己计算）</p>
-</blockquote>
-<h3 id="TCP滑动窗口"><a href="#TCP滑动窗口" class="headerlink" title="TCP滑动窗口"></a>TCP滑动窗口</h3><blockquote>
-<p>TCP发送窗口， 和接受窗口内的数据段都是可接受或者可以发送的，当发送方的某个报文段已经被确认后， 窗口会向右移动一段距离， 更新可以接受和被接受的报文段</p>
-</blockquote>
-<h3 id="TCP的流量控制"><a href="#TCP的流量控制" class="headerlink" title="TCP的流量控制"></a>TCP的流量控制</h3><blockquote>
-<p>TCP通过控制窗口大小实现流量的控制<br>为了避免发送不出数据， 接收方会时不时发送一个 <strong>窗口探测</strong> 的数据段（只包含一个字节）来确定最新的窗口大小</p>
-</blockquote>
-<h2 id="TCP的拥塞控制"><a href="#TCP的拥塞控制" class="headerlink" title="TCP的拥塞控制"></a>TCP的拥塞控制</h2><blockquote>
-<p><strong>主要通过四个算法</strong>：慢开始，拥塞避免，快重传，快恢复</p>
-</blockquote>
-<p>维护一个拥塞窗口（cwnd），注意道拥塞窗口只是一个状态变量</p>
-<p>假设接收方有足够大的接收窗口，窗口的大小为报文段</p>
-<ul>
-<li><p>慢开始和拥塞避免</p>
-<pre><code> 最开始执行满开始，让cwnd = 1，之后每当接受确认，就倍增 2 4 8 ....再设置一个慢开始门限ssthresh，当慢开始大于这个门限的时候进入拥塞避免，每个轮次让cwnd + 1
- 1   
- 如果出现了超时，就另慢开始门限 = cwnd / 2，重新开始慢开始
-</code></pre></li>
-<li><p>快重传和快恢复</p>
-<pre><code>  接收方每次接收报文都应该对最后一次收到的报文进行确认，例如收到了B1， B2， B4
-  则在收到B2时候要对B1确认，B4时候要对B2确认
-  当发送方重复收到3次接收方发来的某个相同的报文的确认时，立即执行快重传（因为这时候知道有报文丢失），在这种情况下是报文段的丢失，不是网络拥塞，所以直接执行快恢复，让慢开始上限（ssthresh）= 拥塞窗口（cwnd） / 2；注意此时直接进入拥塞避免
-</code></pre></li>
-</ul>
-<blockquote>
-<p>注意 慢开始和快恢复的慢和快指的是cwnd的设定值，慢开始cwnd设置成1，快开始cwnd设置成ssthresh</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>计算机网络</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>git简单使用</title>
-    <url>/2025/03/01/git%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<ul>
-<li><h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><ul>
-<li>直接 <code>git init</code>将对应目录下一个文件夹变成git仓库</li>
-<li>使用<code>git clone</code>从github上克隆一个已经有的项目到指定文件夹<blockquote>
-<p>检查.git文件创建成功，不能直接ls，因为ls不会显示》.git 得使用ls -a显示</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><h3 id="git仓库包括两种"><a href="#git仓库包括两种" class="headerlink" title="git仓库包括两种:"></a>git仓库包括两种:</h3><ul>
-<li>本地仓库</li>
-<li>远程仓库</li>
-</ul>
-</li>
-<li><p>commit : 提交，将本地文件和版本信息保存到本地仓库</p>
-</li>
-<li>push: 推送，将本地仓库和版本信息提交到远程仓库</li>
-<li>pull : 拉取，将远程仓库文件和版本信息下载到本地文件</li>
-</ul>
-<hr>
-<ul>
-<li>git GUI : 图形界面</li>
-</ul>
-<hr>
-<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><blockquote>
-<p>使用git</p>
-</blockquote>
-<h4 id="1-全局设置"><a href="#1-全局设置" class="headerlink" title="1. 全局设置"></a>1. 全局设置</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name 你的名字</span><br><span class="line">git confih --global user.email 你的邮箱</span><br></pre></td></tr></table></figure>
-<p>查看配置信息:<br><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --list</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>上面设置的是git的初始化仓库，和github和gitee等的账号不一样</li>
-</ul>
-<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><ul>
-<li>版本库：前面看到的.git隐藏文件夹就是版本库，版本库中储存了配置信息，日志文件，版本信息等</li>
-<li>工作区： 包含.git文件夹目录的工作区，也称为工作目录，主要用于存放代码</li>
-<li>暂存区： .git文件夹有很多文件，其中一个index文件就是暂存区，也可以叫做stage，是一个临时保存文件的地方</li>
-</ul>
-<p>工作区 ——&gt; (git add) 暂存区 ——-&gt;(git commit)版本库</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git add 文件 //支持多个文件同时加入</span><br></pre></td></tr></table></figure></h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git commit -m &#x27;输入提示语&#x27; 文件名字</span><br></pre></td></tr></table></figure>
-<h3 id="工作区文件状态"><a href="#工作区文件状态" class="headerlink" title="工作区文件状态"></a>工作区文件状态</h3><blockquote>
-<p>git文件工作区分两个状态</p>
-</blockquote>
-<ul>
-<li>untracked 未跟踪(未被纳入版本库)</li>
-<li>tracked     已被跟踪(纳入版本控制)<br>  1)Unmodified 未被修改状态<br>  2）Modified   已被修改状态<br>  3）Staged      已暂存状态<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git status // 查看当前工作区的状态</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<ul>
-<li>git reset<br>1.把暂存区的东西放回工作区<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset + 文件//取消对文件的跟踪（从暂存区取消暂存，返回工作区）</span><br></pre></td></tr></table></figure>
-2.回退版本(通过git log 查看版本号)<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard 版本号</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li>git commit将暂存区的内容提交到版本库<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git commit -m &#x27;你这一次提交的修改内容&#x27; 你要提交或者修改了的文件</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="远程仓库操作"><a href="#远程仓库操作" class="headerlink" title="远程仓库操作"></a>远程仓库操作</h3><p><code>git remote//查看远程仓库</code><br><code>git remote -v//查看详细信息</code></p>
-<ul>
-<li><p>添加远程仓库</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add &lt;short name&gt; &lt;url&gt; //short_name一般是origin</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>推送：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git push [remote_name] [branch_name] // 一般remote用origin代替</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="分支操作"><a href="#分支操作" class="headerlink" title="分支操作"></a>分支操作</h3><ul>
-<li>git branch 查看分支</li>
-<li>git branch [ name ] 创建分支</li>
-<li>git checkout [name] 切换分支</li>
-<li>git push [short_name】[name]  推送到远程仓库</li>
-<li>git merge [name] 合并分支(把指定代码合并到当前分支)</li>
-<li>git branch -d [name] 删除分支</li>
-</ul>
-<h4 id="分支查看："><a href="#分支查看：" class="headerlink" title="分支查看："></a>分支查看：</h4><ul>
-<li>git branch 列出所有本地分支</li>
-<li>git branch -r 列出所有远程分支</li>
-<li>git branch -a 列出所有本地分支和远程分支</li>
-</ul>
-<hr>
-<blockquote>
-<p>标签</p>
-</blockquote>
-<ul>
-<li>git tag 列出已有的标签</li>
-<li>git tag [name] 创建标签</li>
-<li>git push [short_name] 【name] 将标签推送到远程仓库</li>
-<li>git checkout -b [branch] 【name] 检出标签</li>
-</ul>
-<h3 id="查看最后一次使用某个文件的某人"><a href="#查看最后一次使用某个文件的某人" class="headerlink" title="查看最后一次使用某个文件的某人"></a>查看最后一次使用某个文件的某人</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git log -x 文件名</span><br></pre></td></tr></table></figure>
-<ul>
-<li>-x是第几次</li>
-</ul>
-<h3 id="查看修改摩尔个文件中的collections时的提交信息"><a href="#查看修改摩尔个文件中的collections时的提交信息" class="headerlink" title="查看修改摩尔个文件中的collections时的提交信息"></a>查看修改摩尔个文件中的collections时的提交信息</h3><p>git blame , git show<br>或者使用git log</p>
-<ul>
-<li><code>git config</code>: Git 是一个 <a href="https://git-scm.com/docs/git-config">高度可定制的</a> 工具</li>
-<li><code>git clone --depth=1</code>: 浅克隆（shallow clone），不包括完整的版本历史信息</li>
-<li><code>git add -p</code>: 交互式暂存</li>
-<li><code>git rebase -i</code>: 交互式变基</li>
-<li><code>git blame</code>: 查看最后修改某行的人</li>
-<li><code>git stash</code>: 暂时移除工作目录下的修改内容</li>
-<li><code>git bisect</code>: 通过二分查找搜索历史记录</li>
-<li><code>.gitignore</code>: <a href="https://git-scm.com/docs/gitignore">指定</a> 故意不追踪的文件</li>
-</ul>
-]]></content>
-      <categories>
-        <category>git</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>文章分类</title>
     <url>/categories/index.html</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>shuoshuo</title>
+    <url>/shuoshuo/index.html</url>
     <content><![CDATA[]]></content>
   </entry>
   <entry>
@@ -822,18 +827,13 @@ public class Demo01ParseMethod &#123;
 ]]></content>
   </entry>
   <entry>
-    <title>comment</title>
-    <url>/comment/index.html</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>shuoshuo</title>
-    <url>/shuoshuo/index.html</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>tags</title>
     <url>/tags/index.html</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>comment</title>
+    <url>/comment/index.html</url>
     <content><![CDATA[]]></content>
   </entry>
 </search>
