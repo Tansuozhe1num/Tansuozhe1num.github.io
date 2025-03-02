@@ -3320,12 +3320,13 @@ figure.highlight pre .javascript .function {
 }
 #footer {
   position: relative;
-  background-color: #49b1f5;
+}
+# background-color: $light-blue {
   background-attachment: scroll;
   background-position: bottom;
   background-size: cover;
 }
-#footer:before {
+# background-color: $light-blue:before {
   position: absolute;
   width: 100%;
   height: 100%;
