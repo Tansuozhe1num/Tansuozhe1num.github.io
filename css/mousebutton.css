@@ -2,17 +2,17 @@
 /* 全局默认鼠标指针 */
 body,
 html {
-    cursor: url('./mouse/sfinal.cur'), auto !important;
+    cursor: url('./mouse/Arrow.cur'), auto !important;
 }
 
 /* 悬停图片时的鼠标指针 */
 img {
-    cursor: url('./mouse/linkstop.cur'), auto !important;
+    cursor: url('./mouse/SizeAll.cur'), auto !important;
 }
 
 /* 选择链接标签时的鼠标指针 */
 a:hover {
-    cursor: url('./mouse/linkstop.cur'), auto;
+    cursor: url('./mouse/SizeAll.cur'), auto;
 }
 
 /* 选中输入框时的鼠标指针 */
