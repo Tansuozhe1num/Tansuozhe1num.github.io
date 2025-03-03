@@ -4,3 +4,9 @@
     font-display: swap;
     src: url('./HanYiCuFangSongJian-1.ttf') format("truetype");
 } 
+
+@font-face {
+  font-family: 'YunFont';
+  font-display: swap;
+  src: url('./FiraCode-Regular.ttf') format("truetype");  
+}
