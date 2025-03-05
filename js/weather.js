@@ -5,7 +5,7 @@ window.SeniverseWeatherWidget('show', {
   geolocation: true,
   language: "auto",
   unit: "c",
-  theme: "dark",
+  theme: "blue",
   token: "d46d6926-ce2b-4f0b-ad23-cfccb98ad469",
   hover: "enabled",
   container: "tp-weather-widget"
