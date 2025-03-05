@@ -282,5 +282,6 @@
 
 
 #tp-weather-widget {
-    color: #ff9800 !important; /* 橙色字体 */
+    color: orange !important; /* 设置字体颜色为橙色 */
 }
+
