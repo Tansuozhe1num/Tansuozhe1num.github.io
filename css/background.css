@@ -282,16 +282,12 @@
 
 
 #tp-weather-widget {
-    color: #ff9800;   /* 字体橙色 */
-    font-size: 16px;  /* 调整字体大小 */
-    font-weight: bold; /* 加粗，让它更清晰 */
-    text-shadow: 1px 1px 5px rgba(255, 165, 0, 0.5); /* 添加柔和光晕 */
-    font-family: "Arial", "Microsoft YaHei", sans-serif; /* 美化字体 */
-}
-#tp-weather-widget {
-    background: rgba(0, 0, 0, 0.3);  /* 半透明黑色背景 */
-    padding: 5px 10px;  /* 让文字周围有点间距 */
-    border-radius: 5px;  /* 圆角效果 */
-    display: inline-block;  /* 让背景正好包裹内容 */
-    color: #ff9800; /* 橙色字体 */
+    background: rgba(0, 0, 0, 0.3); /* 半透明黑色背景 */
+    padding: 5px 10px; /* 添加内边距 */
+    border-radius: 5px; /* 圆角 */
+    color: #ff9800 !important; /* 橙色字体 */
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(255, 140, 0, 0.6); /* 增强立体感 */
+    display: inline-block; /* 让背景正好包裹内容 */
 }
