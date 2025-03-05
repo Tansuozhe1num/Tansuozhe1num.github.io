@@ -283,7 +283,7 @@
 
 #tp-weather-widget .sw-container {
   /* 使用你博客中常用的字体，也可以用 inherit */
-  font-family: inherit;
+  font-family: "PMZDCST";
   font-size: 20px;
   font-weight: 700;
   /* 渐变背景 */
