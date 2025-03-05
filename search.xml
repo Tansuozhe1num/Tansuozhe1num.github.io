@@ -307,11 +307,11 @@
     
     
     <entry>
-      <title>about</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
+      <title>shuoshuo</title>
+      <link href="/shuoshuo/index.html"/>
+      <url>/shuoshuo/index.html</url>
       
-        <content type="html"><![CDATA[<hr><h3 id="关于作者"><a href="#关于作者" class="headerlink" title="关于作者"></a>关于作者</h3><ul><li>中国海洋大学本科生一枚。</li><li>本站诞生与某天心血来潮，用来分享学习中遇到的问题和算法题解总结。</li><li>请各路朋友多多指教 ！</li></ul><hr><h3 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h3><ul><li>微信 : a511017802</li><li>邮件 : 511017802@qq.com</li><li>博客 ：Tansuozhe1num.github.io</li></ul><hr>]]></content>
+        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
@@ -329,20 +329,20 @@
     
     
     <entry>
-      <title>comment</title>
-      <link href="/comment/index.html"/>
-      <url>/comment/index.html</url>
+      <title>about</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<hr><h3 id="关于作者"><a href="#关于作者" class="headerlink" title="关于作者"></a>关于作者</h3><ul><li>中国海洋大学本科生一枚。</li><li>本站诞生与某天心血来潮，用来分享学习中遇到的问题和算法题解总结。</li><li>请各路朋友多多指教 ！</li></ul><hr><h3 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h3><ul><li>微信 : a511017802</li><li>邮件 : 511017802@qq.com</li><li>博客 ：Tansuozhe1num.github.io</li></ul><hr>]]></content>
       
     </entry>
     
     
     
     <entry>
-      <title>shuoshuo</title>
-      <link href="/shuoshuo/index.html"/>
-      <url>/shuoshuo/index.html</url>
+      <title>comment</title>
+      <link href="/comment/index.html"/>
+      <url>/comment/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
