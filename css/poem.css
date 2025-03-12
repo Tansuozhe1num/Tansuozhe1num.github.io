@@ -1,31 +1,31 @@
-/* 古诗词卡片 */
+/* 古诗词卡片 - Modern Style */
 #card-poem {
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 0.75rem;
   min-height: 150px;
-  background: var(--heo-background, #fff);
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: var(--card-background, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 #card-poem:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
 }
 
 div#poem_sentence {
   text-align: center;
-  font-family: "Georgia", serif;
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.5;
   margin-bottom: 0.5rem;
-  padding: 1rem;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--heo-secondbg, #f0f0f0), var(--heo-secondbg-alt, #e0e0e0));
-  min-height: 80px;
-  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--secondary-bg, #f7f7f7), var(--secondary-bg-alt, #eaeaea));
+  min-height: 70px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 div#poem_info {
@@ -34,22 +34,23 @@ div#poem_info {
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
-  color: var(--heo-secondtext, #555);
-  font-size: 0.8rem;
+  color: var(--secondary-text, #555);
+  font-size: 0.75rem;
 }
 
 div#poem_dynasty {
   order: 0;
-  padding: 4px 8px;
-  background: var(--heo-card-btn-bg, #cce);
-  color: var(--heo-fontcolor, #333);
-  border-radius: 8px;
-  font-weight: bold;
+  padding: 2px 6px;
+  background: var(--btn-bg, #dfe6f2);
+  color: var(--font-color, #333);
+  border-radius: 6px;
+  font-weight: 600;
 }
 
 div#poem_author {
   order: 1;
-  padding: 4px;
-  margin-left: 8px;
+  padding: 2px;
+  margin-left: 6px;
   font-style: italic;
+  color: var(--author-color, #666);
 }
