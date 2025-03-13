@@ -58,3 +58,9 @@ div#poem_author {
   font-style: italic;
   color: var(--author-color, #666);
 }
+
+div#poem_sentence {
+  /* ...其他样式保持不变 */
+  word-break: keep-all;
+}
+
