@@ -18,7 +18,7 @@
 div#poem_sentence {
   text-align: center;
   /* 使用现代、简洁的无衬线字体，适用于中文博客 */
-  font-family: 'PingFang SC', 'Hiragino Sans', 'Microsoft YaHei', sans-serif;
+  font-family: 'PMZDCST';
   font-size: 1rem;
   line-height: 1.8;
   letter-spacing: 0.3px;
