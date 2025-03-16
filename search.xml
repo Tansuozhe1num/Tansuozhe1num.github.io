@@ -828,17 +828,6 @@
     
     
     <entry>
-      <title>哔哔一下</title>
-      <link href="/artitalk/index.html"/>
-      <url>/artitalk/index.html</url>
-      
-        <content type="html"><![CDATA[<!-- 引用 artitalk --><script type="text/javascript" src="https://unpkg.com/artitalk"></script><!-- 存放说说的容器 --><div id="artitalk_main"></div><script>new Artitalk({    serverURL: 'https://qlkrssux.api.lncldglobal.com',// Your LeanCloud site    appId: 'QLkrsSUXWoq6pMt7E8wWUlRk-MdYXbMMI', // Your LeanCloud appId    appKey: '0NH6KVhnb773X0q7fmZ01O82', // Your LeanCloud appKey    color1: 'linear-gradient(45deg,rgba(109,208,242,0.75) 15%,rgba(245,154,190,0.75) 85%)',    color2: 'linear-gradient(45deg,rgba(109,208,242,0.75) 15%,rgba(245,154,190,0.75) 85%)',})</script>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>about</title>
       <link href="/about/index.html"/>
       <url>/about/index.html</url>
@@ -855,6 +844,17 @@
       <url>/tags/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>哔哔一下</title>
+      <link href="/artitalk/index.html"/>
+      <url>/artitalk/index.html</url>
+      
+        <content type="html"><![CDATA[<!-- 引用 artitalk --><script type="text/javascript" src="https://unpkg.com/artitalk"></script><!-- 存放说说的容器 --><div id="artitalk_main"></div><script>new Artitalk({    serverURL: 'https://qlkrssux.api.lncldglobal.com',// Your LeanCloud site    appId: 'QLkrsSUXWoq6pMt7E8wWUlRk-MdYXbMMI', // Your LeanCloud appId    appKey: '0NH6KVhnb773X0q7fmZ01O82', // Your LeanCloud appKey    color1: 'linear-gradient(45deg,rgba(109,208,242,0.75) 15%,rgba(245,154,190,0.75) 85%)',    color2: 'linear-gradient(45deg,rgba(109,208,242,0.75) 15%,rgba(245,154,190,0.75) 85%)',})</script>]]></content>
       
     </entry>
     

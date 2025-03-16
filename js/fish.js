@@ -1,6 +1,6 @@
 // 动态心跳
 $(document).ready(function(e){
-    $('.copyright').html('©2022 - 2023 <i class="fa-fw fas fa-heartbeat fa-beat" style="color: #f92672;"></i> By  懒觉猫先生 <div class="framework-info"> </div>');
+    $('.copyright').html('©2024 - 2025 <i class="fa-fw fas fa-heartbeat fa-beat" style="color: #f92672;"></i> By  梦始 <div class="framework-info"> </div>');
 })
 $(document).ready(function(e){
     show_date_time();
