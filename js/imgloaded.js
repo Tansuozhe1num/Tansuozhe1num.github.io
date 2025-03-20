@@ -67,10 +67,10 @@ class ProgressiveLoad {
   };
   
   const config = {
-    smallSrc: '/img/xiao.png', // 小图链接 尽可能配置小于100k的图片
-    largeSrc: '/img/atback.png', // 大图链接 最终显示的图片
-    mobileSmallSrc: '/img/xiao.png', // 手机端小图链接 尽可能配置小于100k的图片
-    mobileLargeSrc: '/img/atback.png', // 手机端大图链接 最终显示的图片
+    smallSrc: '/img/x.jpeg', // 小图链接 尽可能配置小于100k的图片
+    largeSrc: '/img/bkg.png', // 大图链接 最终显示的图片
+    mobileSmallSrc: '/img/x.jpeg', // 手机端小图链接 尽可能配置小于100k的图片
+    mobileLargeSrc: '/img/bkg.png', // 手机端大图链接 最终显示的图片
     enableRoutes: ['/'],
     };
 
