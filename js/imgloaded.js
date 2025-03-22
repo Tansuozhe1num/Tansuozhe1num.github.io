@@ -68,9 +68,9 @@ class ProgressiveLoad {
   
   const config = {
     smallSrc: '/img/x.jpeg', // 小图链接 尽可能配置小于100k的图片
-    largeSrc: 'https://img.picui.cn/free/2025/03/20/67dba8e4b77aa.png', // 大图链接 最终显示的图片
+    largeSrc: '/img/bkg.jpg', // 大图链接 最终显示的图片
     mobileSmallSrc: '/img/x.jpeg', // 手机端小图链接 尽可能配置小于100k的图片
-    mobileLargeSrc: 'https://img.picui.cn/free/2025/03/20/67dba8e4b77aa.png', // 手机端大图链接 最终显示的图片
+    mobileLargeSrc: '/img/bkg.jpg', // 手机端大图链接 最终显示的图片
     enableRoutes: ['/'],
     };
 
