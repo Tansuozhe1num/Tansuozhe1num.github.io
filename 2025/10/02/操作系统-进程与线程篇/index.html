@@ -1,0 +1,675 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>操作系统 --进程与线程篇 | 梦始</title><meta name="author" content="梦始"><meta name="copyright" content="梦始"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="进程和线程区别 进程（Process）      操作系统资源分配的基本单位 每个进程有自己独立的地址空间（代码段、数据段、堆、栈） 程序一旦运行，就会至少有一个进程 切换开销大，因为需要切换整个内存地址空间、文件描述符等上下文   线程（Thread）  程序执行的最小单位，是 CPU 调度的基本单位 一个进程可以包含多个线程         线程共享进程的地址空间，但有自己独立的栈和寄存器 切">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统 --进程与线程篇">
+<meta property="og:url" content="https://tansuozhe1num.github.io/2025/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B%E7%AF%87/index.html">
+<meta property="og:site_name" content="梦始">
+<meta property="og:description" content="进程和线程区别 进程（Process）      操作系统资源分配的基本单位 每个进程有自己独立的地址空间（代码段、数据段、堆、栈） 程序一旦运行，就会至少有一个进程 切换开销大，因为需要切换整个内存地址空间、文件描述符等上下文   线程（Thread）  程序执行的最小单位，是 CPU 调度的基本单位 一个进程可以包含多个线程         线程共享进程的地址空间，但有自己独立的栈和寄存器 切">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tansuozhe1num.github.io/img/ppp.png">
+<meta property="article:published_time" content="2025-10-02T03:55:10.000Z">
+<meta property="article:modified_time" content="2025-10-02T04:02:05.812Z">
+<meta property="article:author" content="梦始">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tansuozhe1num.github.io/img/ppp.png"><link rel="shortcut icon" href="/img/ppp.png"><link rel="canonical" href="https://tansuozhe1num.github.io/2025/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B%E7%AF%87/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '操作系统 --进程与线程篇',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/css/background.css"><link rel="stylesheet" href="/css/fonts.css"><link rel="stylesheet" href="/css/mousebutton.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/mainColor/heoMainColor.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/poem.css"><link rel="stylesheet" type="text/css" href="/css/fengche.css"><link rel="stylesheet" href="/css/imgloaded.css?1"><link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/zyoushuo/Blog@latest/hexo/css/loading_style_1.css" ><link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/zyoushuo/Blog@latest/hexo/css/loading_style_2.css" ><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script>
+<div id='loader'>
+    
+    <div class="outer_box">
+    <div class='loader_overlay'></div>
+    <div class='loader_cogs'>
+        <div class='loader_cogs__top'>
+            <div class='top_part'></div>
+            <div class='top_part'></div>
+            <div class='top_part'></div>
+            <div class='top_hole'></div>
+        </div>
+        <div class='loader_cogs__left'>
+            <div class='left_part'></div>
+            <div class='left_part'></div>
+            <div class='left_part'></div>
+            <div class='left_hole'></div>
+        </div>
+        <div class='loader_cogs__bottom'>
+            <div class='bottom_part'></div>
+            <div class='bottom_part'></div>
+            <div class='bottom_part'></div>
+            <div class='bottom_hole'></div>
+        </div>
+        <p style="text-align:center">&nbsp;&nbsp;&nbsp;loading...</p>
+    </div>
+    </div>
+    
+</div>
+    
+<script>
+    var endLoading = function () {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loader').classList.add("loading");
+    }
+    window.addEventListener('load',endLoading);
+</script>
+
+
+<div id="web_bg" style="background-color: #efefef;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "/img/loading2.gif" data-lazy-src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/img/ppp.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/artitalk"><i class="fa-fw fas fa-lightbulb"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/ppp.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">梦始</span></a><a class="nav-page-title" href="/"><span class="site-name">操作系统 --进程与线程篇</span></a></span><div id="weather"><div id="tp-weather-widget"></div></div><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/artitalk"><i class="fa-fw fas fa-lightbulb"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">操作系统 --进程与线程篇</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-10-02T03:55:10.000Z" title="发表于 2025-10-02 11:55:10">2025-10-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-10-02T04:02:05.812Z" title="更新于 2025-10-02 12:02:05">2025-10-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="进程和线程区别"><a href="#进程和线程区别" class="headerlink" title="进程和线程区别"></a>进程和线程区别</h2><ul>
+<li><p><strong>进程（Process）</strong>    </p>
+<ul>
+<li>操作系统资源分配的基本单位</li>
+<li>每个进程有自己独立的地址空间（代码段、数据段、堆、栈）</li>
+<li>程序一旦运行，就会至少有一个进程</li>
+<li>切换开销大，因为需要切换整个内存地址空间、文件描述符等上下文</li>
+</ul>
+</li>
+<li><p><strong>线程（Thread）</strong></p>
+<ul>
+<li>程序执行的最小单位，是 CPU 调度的基本单位</li>
+<li>一个进程可以包含多个线程        </li>
+<li>线程共享进程的地址空间，但有自己独立的栈和寄存器</li>
+<li>切换开销小，多个线程共享进程资源，只需切换少量上下文（寄存器、栈指针）</li>
+</ul>
+</li>
+</ul>
+<p>👉 直观类比：</p>
+<ul>
+<li><strong>进程 = 公司</strong>（独立运作，有资源）</li>
+<li><strong>线程 = 公司里的员工</strong>（共享公司资源，但干不同的活）</li>
+</ul>
+<p> 通信方面：</p>
+<ul>
+<li><strong>进程间通信（IPC）</strong>：麻烦，需要操作系统提供机制（管道、消息队列、共享内存、socket）</li>
+<li><strong>线程间通信</strong>：方便，因为共享进程地址空间，直接读写共享变量即可，但需要同步机制（锁、条件变量）避免数据冲突</li>
+</ul>
+<p>崩溃影响：</p>
+<ul>
+<li><strong>进程</strong>：一个进程崩溃不会影响其他进程（只要没有依赖关系）</li>
+<li><strong>线程</strong>：一个线程崩溃可能导致整个进程崩溃（因为共享地址空间）</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>对比点</th>
+<th><strong>进程</strong></th>
+<th><strong>线程</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定义</td>
+<td>资源分配的基本单位</td>
+<td>CPU 调度的基本单位</td>
+</tr>
+<tr>
+<td>地址空间</td>
+<td>独立</td>
+<td>共享（代码、堆），但有独立栈</td>
+</tr>
+<tr>
+<td>切换开销</td>
+<td>大</td>
+<td>小</td>
+</tr>
+<tr>
+<td>通信</td>
+<td>需要 IPC</td>
+<td>直接共享内存，需同步</td>
+</tr>
+<tr>
+<td>崩溃影响</td>
+<td>不影响其他进程</td>
+<td>可能拖垮整个进程</td>
+</tr>
+<tr>
+<td>粒度</td>
+<td>粗</td>
+<td>细</td>
+</tr>
+<tr>
+<td>并发能力</td>
+<td>多进程并发</td>
+<td>多线程并发，更轻量</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h2 id="什么是线程同步，线程同步有哪些方法？"><a href="#什么是线程同步，线程同步有哪些方法？" class="headerlink" title="什么是线程同步，线程同步有哪些方法？"></a>什么是线程同步，线程同步有哪些方法？</h2><h3 id="1-什么是线程同步？"><a href="#1-什么是线程同步？" class="headerlink" title="1. 什么是线程同步？"></a>1. 什么是线程同步？</h3><ul>
+<li><strong>线程同步</strong> = 保证多个线程在访问共享资源时，按照一定的顺序执行，避免数据冲突。    </li>
+<li>背景：多线程可以同时访问同一块内存，如果不加限制就可能出现“竞态条件”（race condition）。</li>
+<li><p>同步的目标：</p>
+<ol>
+<li><p>保证数据一致性（不会读到脏数据）。</p>
+</li>
+<li><p>避免死锁和资源浪费。</p>
+</li>
+<li><p>提高并发效率。</p>
+</li>
+</ol>
+</li>
+</ul>
+<p>👉 举例：<br>银行账户余额 = 1000 元。</p>
+<ul>
+<li>线程 A：取 800 元。</li>
+<li>线程 B：取 500 元。<br>  如果没有同步机制，可能两个线程都判断余额够 → 都取成功 → 最终余额变负数 ❌。<br>  同步机制可以保证操作的原子性：要么 A 成功 B 失败，要么 B 成功 A 失败。</li>
+</ul>
+<hr>
+<h3 id="2-线程同步的方法"><a href="#2-线程同步的方法" class="headerlink" title="2. 线程同步的方法"></a>2. 线程同步的方法</h3><h4 id="1-互斥锁（Mutex）"><a href="#1-互斥锁（Mutex）" class="headerlink" title="(1) 互斥锁（Mutex）"></a>(1) 互斥锁（Mutex）</h4><ul>
+<li><p><strong>最常见</strong>的方法。</p>
+</li>
+<li><p>线程进入临界区前先加锁，用完资源后释放锁。</p>
+</li>
+<li><p>保证同一时间只有一个线程能访问共享资源。</p>
+</li>
+<li><p>缺点：可能导致阻塞，若使用不当会出现死锁。</p>
+</li>
+</ul>
+<blockquote>
+<p>C++ <code>std::mutex</code>，Java <code>synchronized</code> / <code>ReentrantLock</code>。</p>
+</blockquote>
+<h4 id="2-读写锁（Read-Write-Lock）"><a href="#2-读写锁（Read-Write-Lock）" class="headerlink" title="(2) 读写锁（Read-Write Lock）"></a>(2) 读写锁（Read-Write Lock）</h4><ul>
+<li><p>区分 <strong>读锁</strong> 和 <strong>写锁</strong>：</p>
+<ul>
+<li><p>多个线程可以同时读（共享锁）。</p>
+</li>
+<li><p>写操作必须独占（互斥锁）。</p>
+</li>
+</ul>
+</li>
+<li><p>适合读多写少的场景（如缓存、配置查询）。</p>
+</li>
+</ul>
+<blockquote>
+<p>Java <code>ReentrantReadWriteLock</code>，C++ <code>std::shared_mutex</code>。</p>
+</blockquote>
+<h4 id="3-信号量（Semaphore）"><a href="#3-信号量（Semaphore）" class="headerlink" title="(3) 信号量（Semaphore）"></a>(3) 信号量（Semaphore）</h4><ul>
+<li><p>维护一个计数器，表示可用资源数量。</p>
+</li>
+<li><p><code>P</code> 操作（等待）：请求一个资源，计数器减一；如果不足就阻塞。</p>
+</li>
+<li><p><code>V</code> 操作（释放）：释放资源，计数器加一。</p>
+</li>
+<li><p>常用于<strong>限流</strong>，比如线程池控制最大并发数。</p>
+</li>
+</ul>
+<blockquote>
+<p>Java <code>Semaphore</code>，Linux <code>sem_t</code>。</p>
+</blockquote>
+<h4 id="4-条件变量（Condition-Variable）"><a href="#4-条件变量（Condition-Variable）" class="headerlink" title="(4) 条件变量（Condition Variable）"></a>(4) 条件变量（Condition Variable）</h4><ul>
+<li><p>与互斥锁配合使用。</p>
+</li>
+<li><p>线程可以在条件变量上等待，直到某个条件为真再继续执行。</p>
+</li>
+<li><p>常用于<strong>生产者-消费者模型</strong>：</p>
+<ul>
+<li><p>消费者在队列空时等待条件变量；</p>
+</li>
+<li><p>生产者放入数据后通知条件变量。</p>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Java <code>wait()/notify()</code>，C++ <code>std::condition_variable</code>。</p>
+</blockquote>
+<h4 id="5-自旋锁（Spinlock）"><a href="#5-自旋锁（Spinlock）" class="headerlink" title="(5) 自旋锁（Spinlock）"></a>(5) 自旋锁（Spinlock）</h4><ul>
+<li><p>当资源被占用时，线程不断循环检查（忙等），而不是挂起。</p>
+</li>
+<li><p>适合<strong>锁占用时间很短</strong>的场景（避免线程上下文切换开销）。</p>
+</li>
+<li><p>缺点：浪费 CPU 时间。</p>
+</li>
+</ul>
+<h4 id="6-屏障（Barrier）"><a href="#6-屏障（Barrier）" class="headerlink" title="(6) 屏障（Barrier）"></a>(6) 屏障（Barrier）</h4><ul>
+<li><p>一种同步点。</p>
+</li>
+<li><p>多个线程必须都到达某个屏障位置，才能继续往下执行。</p>
+</li>
+<li><p>常用于并行计算的阶段性同步。</p>
+</li>
+</ul>
+<blockquote>
+<p>Java <code>CyclicBarrier</code>，C++20 <code>std::barrier</code>。</p>
+</blockquote>
+<hr>
+<h2 id="PCB-—进程状态的标识"><a href="#PCB-—进程状态的标识" class="headerlink" title="PCB —进程状态的标识"></a>PCB —进程状态的标识</h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">┌─────────────────┐</span></span><br><span class="line"><span class="string">│</span>   <span class="string">PCB</span> <span class="string">(进程档案)</span> <span class="string">│</span></span><br><span class="line"><span class="string">├─────────────────┤</span></span><br><span class="line"><span class="string">│</span> <span class="string">PID</span> <span class="string">=</span> <span class="number">1234</span>      <span class="string">│</span>  <span class="string">←</span> <span class="string">身份信息</span></span><br><span class="line"><span class="string">│</span> <span class="string">状态</span> <span class="string">=</span> <span class="string">就绪</span>       <span class="string">│</span></span><br><span class="line"><span class="string">│</span> <span class="string">PC</span> <span class="string">=</span> <span class="number">0x8048123</span>  <span class="string">│</span>  <span class="string">←</span> <span class="string">程序计数器</span></span><br><span class="line"><span class="string">│</span> <span class="string">SP</span> <span class="string">=</span> <span class="number">0x7fff1234</span> <span class="string">│</span>  <span class="string">←</span> <span class="string">栈指针</span></span><br><span class="line"><span class="string">│</span> <span class="string">优先级</span> <span class="string">=</span> <span class="number">5</span>       <span class="string">│</span></span><br><span class="line"><span class="string">│</span> <span class="string">打开文件表指针</span>     <span class="string">│</span></span><br><span class="line"><span class="string">│</span> <span class="string">页表指针</span>          <span class="string">│</span></span><br><span class="line"><span class="string">└─────────────────┘</span></span><br></pre></td></tr></table></figure>
+<p>PCB作用：</p>
+<ol>
+<li><strong>进程切换</strong><ul>
+<li>内核保存当前进程的 PCB（寄存器内容、状态）。</li>
+<li>切换到另一个进程时，从该进程的 PCB 中恢复 CPU 状态。</li>
+</ul>
+</li>
+<li><strong>进程管理</strong><ul>
+<li>操作系统通过 PCB 维护所有进程的运行状态（创建、调度、挂起、终止）。</li>
+</ul>
+</li>
+<li><p><strong>进程通信</strong></p>
+<ul>
+<li>PCB 中保存通信所需的信息（管道、消息队列等）。</li>
+</ul>
+<p>直观类比</p>
+</li>
+</ol>
+<ul>
+<li><strong>进程</strong> = 一个在跑的应用。</li>
+<li><strong>PCB</strong> = 操作系统里的“档案袋”，里面记录了这个进程的身份证号（PID）、运行现场（寄存器）、调度优先级、用的资源等。</li>
+<li>当操作系统切换进程时，就像“把档案袋收起来，换另一个档案袋”。</li>
+</ul>
+<hr>
+<h2 id="进程的调度算法-🚩"><a href="#进程的调度算法-🚩" class="headerlink" title="进程的调度算法 🚩"></a>进程的调度算法 🚩</h2><p>![[Pasted image 20251002113159.png]]</p>
+<h3 id="1-先来先服务（FCFS-First-Come-First-Served）"><a href="#1-先来先服务（FCFS-First-Come-First-Served）" class="headerlink" title="(1) 先来先服务（FCFS, First-Come-First-Served）"></a>(1) 先来先服务（FCFS, First-Come-First-Served）</h3><ul>
+<li><strong>类型</strong>：非抢占式</li>
+<li><strong>规则</strong>：按照进程到达就绪队列的顺序分配 CPU。</li>
+<li><strong>优点</strong>：简单、公平</li>
+<li><strong>缺点</strong>：平均等待时间可能大，容易发生 <strong>短作业被长作业阻塞（Convoy Effect）</strong>    </li>
+</ul>
+<h3 id="2-短作业优先（SJF-Shortest-Job-First）"><a href="#2-短作业优先（SJF-Shortest-Job-First）" class="headerlink" title="(2) 短作业优先（SJF, Shortest Job First）"></a>(2) 短作业优先（SJF, Shortest Job First）</h3><ul>
+<li><strong>类型</strong>：非抢占式 / 可抢占式（称 SRTF, Shortest Remaining Time First）    </li>
+<li><strong>规则</strong>：优先执行预计运行时间最短的进程</li>
+<li><strong>优点</strong>：平均等待时间最小（理论上最优）</li>
+<li><strong>缺点</strong>：难以预测进程执行时间；可能导致长作业饥饿</li>
+</ul>
+<h3 id="3-时间片轮转（RR-Round-Robin）"><a href="#3-时间片轮转（RR-Round-Robin）" class="headerlink" title="(3) 时间片轮转（RR, Round Robin）"></a>(3) 时间片轮转（RR, Round Robin）</h3><ul>
+<li><strong>类型</strong>：抢占式    </li>
+<li><strong>规则</strong>：每个进程按顺序分配固定时间片（quantum），时间片用完被剥夺 CPU → 排队等待下一轮</li>
+<li><strong>优点</strong>：响应时间好，适合 <strong>时间共享系统</strong></li>
+<li><p><strong>缺点</strong>：时间片选择不合理会导致频繁切换（开销大）或响应慢</p>
+<h3 id="4-优先级调度（Priority-Scheduling）"><a href="#4-优先级调度（Priority-Scheduling）" class="headerlink" title="(4) 优先级调度（Priority Scheduling）"></a>(4) 优先级调度（Priority Scheduling）</h3></li>
+<li><p><strong>类型</strong>：可抢占或非抢占    </p>
+</li>
+<li><strong>规则</strong>：给每个进程分配一个优先级，CPU 优先给优先级高的进程</li>
+<li><strong>优点</strong>：重要任务优先处理</li>
+<li><strong>缺点</strong>：低优先级可能 <strong>饥饿（Starvation）</strong></li>
+<li><p><strong>改进</strong>：<strong>老化（Aging）</strong>：随着等待时间增加，提高低优先级进程优先级</p>
+<h3 id="5-多级队列调度（Multilevel-Queue）"><a href="#5-多级队列调度（Multilevel-Queue）" class="headerlink" title="(5) 多级队列调度（Multilevel Queue）"></a>(5) 多级队列调度（Multilevel Queue）</h3></li>
+<li><p><strong>类型</strong>：抢占或非抢占    </p>
+</li>
+<li><strong>规则</strong>：将进程按类型（如交互型、批处理型）划分多个队列，每个队列有自己的调度策略</li>
+<li><strong>优点</strong>：可针对不同进程类型优化调度</li>
+<li><p><strong>缺点</strong>：队列划分固定，灵活性低</p>
+<h3 id="6-多级反馈队列调度（Multilevel-Feedback-Queue）"><a href="#6-多级反馈队列调度（Multilevel-Feedback-Queue）" class="headerlink" title="(6) 多级反馈队列调度（Multilevel Feedback Queue）"></a>(6) 多级反馈队列调度（Multilevel Feedback Queue）</h3></li>
+<li><p><strong>类型</strong>：抢占式    </p>
+</li>
+<li><p><strong>规则</strong>：多个队列，进程可根据执行情况在队列间移动</p>
+<ul>
+<li>刚开始进程优先级高（时间片短）</li>
+<li>占用 CPU 时间长 → 移到低优先级队列</li>
+</ul>
+</li>
+<li><p><strong>优点</strong>：兼顾短作业响应快和长作业公平性    </p>
+</li>
+<li><strong>缺点</strong>：实现复杂</li>
+</ul>
+<hr>
+<h2 id="僵尸进程和孤儿进程"><a href="#僵尸进程和孤儿进程" class="headerlink" title="僵尸进程和孤儿进程"></a>僵尸进程和孤儿进程</h2><h3 id="1-僵尸进程（Zombie-Process）"><a href="#1-僵尸进程（Zombie-Process）" class="headerlink" title="1. 僵尸进程（Zombie Process）"></a>1. 僵尸进程（Zombie Process）</h3><h4 id="（1）定义"><a href="#（1）定义" class="headerlink" title="（1）定义"></a>（1）定义</h4><ul>
+<li><strong>僵尸进程</strong>是已经 <strong>执行完毕（终止）</strong> 的进程，但其 <strong>PCB（进程控制块）仍然保留在内核中</strong>。    </li>
+<li>保留的原因是 <strong>父进程还没有读取子进程的退出状态</strong>（通过 <code>wait()</code> 系列系统调用）。</li>
+</ul>
+<h4 id="（2）出现场景"><a href="#（2）出现场景" class="headerlink" title="（2）出现场景"></a>（2）出现场景</h4><ul>
+<li><p>父进程没有及时回收子进程的状态信息：<br><code>pid_t pid = fork(); if (pid == 0) &#123;     exit(0); // 子进程退出 &#125; else &#123;     sleep(1000); // 父进程没有 wait &#125;</code></p>
+</li>
+<li><p>此时子进程已经结束，但 PCB 还在内核中 → 僵尸进程。</p>
+</li>
+</ul>
+<h4 id="（3）特点和作用"><a href="#（3）特点和作用" class="headerlink" title="（3）特点和作用"></a>（3）特点和作用</h4><ul>
+<li><p><strong>特点</strong>：</p>
+<ol>
+<li>不占用 CPU（已经退出）</li>
+<li>占用少量内存（PCB）</li>
+<li>仍然有 PID（可以 <code>ps</code> 查看）</li>
+</ol>
+</li>
+<li><p><strong>作用</strong>：</p>
+<ul>
+<li>保存退出状态，让父进程能获取子进程退出码（正常/异常）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="（4）解决方法"><a href="#（4）解决方法" class="headerlink" title="（4）解决方法"></a>（4）解决方法</h4><ol>
+<li><p><strong>父进程主动回收</strong>：</p>
+<ul>
+<li>使用 <code>wait()</code> 或 <code>waitpid()</code> 读取子进程退出状态。</li>
+</ul>
+</li>
+<li><p><strong>自动回收（避免僵尸）</strong>：</p>
+<ul>
+<li>父进程捕获 <code>SIGCHLD</code> 信号，处理时调用 <code>wait()</code>。</li>
+<li><p>在 Linux 可以设置：<br><code>signal(SIGCHLD, SIG_IGN);</code></p>
+<p>系统会自动回收子进程 PCB。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="（5）排查"><a href="#（5）排查" class="headerlink" title="（5）排查"></a>（5）排查</h4><ul>
+<li><code>ps -el | grep Z</code> → 查看状态为 <code>Z</code> 的进程（僵尸）    </li>
+<li><code>top</code> → STAT 列显示 <code>Z</code></li>
+</ul>
+<hr>
+<h3 id="2-孤儿进程（Orphan-Process）"><a href="#2-孤儿进程（Orphan-Process）" class="headerlink" title="2. 孤儿进程（Orphan Process）"></a>2. 孤儿进程（Orphan Process）</h3><h4 id="（1）定义-1"><a href="#（1）定义-1" class="headerlink" title="（1）定义"></a>（1）定义</h4><ul>
+<li><strong>孤儿进程</strong>是 <strong>父进程先于子进程结束</strong> 的进程。</li>
+<li>系统会把孤儿进程的 <strong>父进程改为 init 进程（PID=1）</strong>，由 init 负责回收。</li>
+</ul>
+<h4 id="（2）出现场景-1"><a href="#（2）出现场景-1" class="headerlink" title="（2）出现场景"></a>（2）出现场景</h4><p><code>pid_t pid = fork(); if (pid &gt; 0) &#123;     exit(0); // 父进程先结束 &#125; else &#123;     sleep(100); // 子进程还在运行 &#125;</code></p>
+<ul>
+<li>子进程就成为孤儿进程，被 <code>init</code> 收养。</li>
+</ul>
+<h4 id="（3）特点和作用-1"><a href="#（3）特点和作用-1" class="headerlink" title="（3）特点和作用"></a>（3）特点和作用</h4><ul>
+<li><p><strong>特点</strong>：    </p>
+<ol>
+<li>父进程消失，子进程仍运行</li>
+<li>由 <code>init</code> 进程接管</li>
+</ol>
+</li>
+<li><p><strong>作用</strong>：</p>
+<ul>
+<li>保证操作系统可以最终回收子进程资源，不会出现永远占用内存的僵尸。</li>
+</ul>
+</li>
+</ul>
+<h4 id="（4）解决方法-1"><a href="#（4）解决方法-1" class="headerlink" title="（4）解决方法"></a>（4）解决方法</h4><ul>
+<li><strong>孤儿进程不需要手动处理</strong>，由 init 自动回收。</li>
+</ul>
+<h4 id="（5）排查-1"><a href="#（5）排查-1" class="headerlink" title="（5）排查"></a>（5）排查</h4><ul>
+<li><code>ps -ef</code> → PPID 列为 1 的进程通常是孤儿进程。</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>定义</th>
+<th>状态</th>
+<th>占用 CPU</th>
+<th>如何回收</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>僵尸进程</td>
+<td>已退出，但 PCB 未被回收</td>
+<td><code>Z</code></td>
+<td>否</td>
+<td>父进程调用 <code>wait()</code>，或由 SIGCHLD 处理自动回收</td>
+</tr>
+<tr>
+<td>孤儿进程</td>
+<td>父进程先退出的活着子进程</td>
+<td>正常运行</td>
+<td>是</td>
+<td>被 <code>init</code> 收养，运行完毕由 init 回收</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>僵尸过多 → PCB 占用过多 → 进程表满 → 新进程无法创建</li>
+<li>孤儿进程本身无害，由 init 管理</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="Dreamstart">梦始</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://tansuozhe1num.github.io/2025/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B%E7%AF%87/">https://tansuozhe1num.github.io/2025/10/02/操作系统-进程与线程篇/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Tansuozhe1num.github.io" target="_blank">梦始</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><div class="post-share"><div class="social-share" data-image="/img/ppp.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%9F%BA%E7%A1%80%E7%AF%87/" title="操作系统 --基础篇"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">操作系统 --基础篇</div></div><div class="info-2"><div class="info-item-1">操作系统的内核（Kernel）和中央处理器（CPU，Central Processing Unit）区别：  操作系统的内核（Kernel）属于操作系统层面，而 CPU 属于硬件。 CPU 主要提供运算，处理各种指令的能力。内核（Kernel）主要负责系统管理比如内存管理，它屏蔽了对硬件的操作。  下图清晰说明了应用程序、内核、CPU 这三者的关系。   用户态和内核态 用户态： 用户态运行的进程可以直接读取用户程序的数据，拥有较低的权限，当需要执行某些特殊权限的时候，例如读写磁盘，网络通信，就需要向操作系统申请资源权限。   内核态： 内核态的权限很大，几乎可以完成对系统的所有操作 操作系统得到指令后，会从用户态转移到内核态，执行对磁盘的操作后将结果返回进程，后转回用户态 虽然拥有更高的权限，但是由于进入内核态时候的上下游调用，开销花费较大，所以要尽量减少进入内核态的次数    用户态： 应用程序，库函数内核态： 进程管理，网络管理，数据管理，内核管理， 设备管理 为什么要有用户态，只要一个内核态不行吗？答：  内核态：CPU...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%9F%BA%E7%A1%80%E7%AF%87/" title="操作系统 --基础篇"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-02</div><div class="info-item-2">操作系统 --基础篇</div></div><div class="info-2"><div class="info-item-1">操作系统的内核（Kernel）和中央处理器（CPU，Central Processing Unit）区别：  操作系统的内核（Kernel）属于操作系统层面，而 CPU 属于硬件。 CPU 主要提供运算，处理各种指令的能力。内核（Kernel）主要负责系统管理比如内存管理，它屏蔽了对硬件的操作。  下图清晰说明了应用程序、内核、CPU 这三者的关系。   用户态和内核态 用户态： 用户态运行的进程可以直接读取用户程序的数据，拥有较低的权限，当需要执行某些特殊权限的时候，例如读写磁盘，网络通信，就需要向操作系统申请资源权限。   内核态： 内核态的权限很大，几乎可以完成对系统的所有操作 操作系统得到指令后，会从用户态转移到内核态，执行对磁盘的操作后将结果返回进程，后转回用户态 虽然拥有更高的权限，但是由于进入内核态时候的上下游调用，开销花费较大，所以要尽量减少进入内核态的次数    用户态： 应用程序，库函数内核态： 进程管理，网络管理，数据管理，内核管理， 设备管理 为什么要有用户态，只要一个内核态不行吗？答：  内核态：CPU...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src= "/img/loading2.gif" data-lazy-src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/img/ppp.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">梦始</div><div class="author-info-description">“今朝有酒，何妨纵歌！”</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Tansuozhe1num"><i class="fab fa-github"></i><span>闲来饮茶</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Keep programming, keep progressing</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E5%8C%BA%E5%88%AB"><span class="toc-number">1.</span> <span class="toc-text">进程和线程区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%EF%BC%8C%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E6%9C%89%E5%93%AA%E4%BA%9B%E6%96%B9%E6%B3%95%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">什么是线程同步，线程同步有哪些方法？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%EF%BC%9F"><span class="toc-number">2.1.</span> <span class="toc-text">1. 什么是线程同步？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">2. 线程同步的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%BA%92%E6%96%A5%E9%94%81%EF%BC%88Mutex%EF%BC%89"><span class="toc-number">2.2.1.</span> <span class="toc-text">(1) 互斥锁（Mutex）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%AF%BB%E5%86%99%E9%94%81%EF%BC%88Read-Write-Lock%EF%BC%89"><span class="toc-number">2.2.2.</span> <span class="toc-text">(2) 读写锁（Read-Write Lock）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E4%BF%A1%E5%8F%B7%E9%87%8F%EF%BC%88Semaphore%EF%BC%89"><span class="toc-number">2.2.3.</span> <span class="toc-text">(3) 信号量（Semaphore）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F%EF%BC%88Condition-Variable%EF%BC%89"><span class="toc-number">2.2.4.</span> <span class="toc-text">(4) 条件变量（Condition Variable）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E8%87%AA%E6%97%8B%E9%94%81%EF%BC%88Spinlock%EF%BC%89"><span class="toc-number">2.2.5.</span> <span class="toc-text">(5) 自旋锁（Spinlock）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E5%B1%8F%E9%9A%9C%EF%BC%88Barrier%EF%BC%89"><span class="toc-number">2.2.6.</span> <span class="toc-text">(6) 屏障（Barrier）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PCB-%E2%80%94%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81%E7%9A%84%E6%A0%87%E8%AF%86"><span class="toc-number">3.</span> <span class="toc-text">PCB —进程状态的标识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95-%F0%9F%9A%A9"><span class="toc-number">4.</span> <span class="toc-text">进程的调度算法 🚩</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%85%88%E6%9D%A5%E5%85%88%E6%9C%8D%E5%8A%A1%EF%BC%88FCFS-First-Come-First-Served%EF%BC%89"><span class="toc-number">4.1.</span> <span class="toc-text">(1) 先来先服务（FCFS, First-Come-First-Served）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%9F%AD%E4%BD%9C%E4%B8%9A%E4%BC%98%E5%85%88%EF%BC%88SJF-Shortest-Job-First%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">(2) 短作业优先（SJF, Shortest Job First）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%EF%BC%88RR-Round-Robin%EF%BC%89"><span class="toc-number">4.3.</span> <span class="toc-text">(3) 时间片轮转（RR, Round Robin）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E4%BC%98%E5%85%88%E7%BA%A7%E8%B0%83%E5%BA%A6%EF%BC%88Priority-Scheduling%EF%BC%89"><span class="toc-number">4.4.</span> <span class="toc-text">(4) 优先级调度（Priority Scheduling）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%A4%9A%E7%BA%A7%E9%98%9F%E5%88%97%E8%B0%83%E5%BA%A6%EF%BC%88Multilevel-Queue%EF%BC%89"><span class="toc-number">4.5.</span> <span class="toc-text">(5) 多级队列调度（Multilevel Queue）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97%E8%B0%83%E5%BA%A6%EF%BC%88Multilevel-Feedback-Queue%EF%BC%89"><span class="toc-number">4.6.</span> <span class="toc-text">(6) 多级反馈队列调度（Multilevel Feedback Queue）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B%E5%92%8C%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B"><span class="toc-number">5.</span> <span class="toc-text">僵尸进程和孤儿进程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B%EF%BC%88Zombie-Process%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">1. 僵尸进程（Zombie Process）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%AE%9A%E4%B9%89"><span class="toc-number">5.1.1.</span> <span class="toc-text">（1）定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%87%BA%E7%8E%B0%E5%9C%BA%E6%99%AF"><span class="toc-number">5.1.2.</span> <span class="toc-text">（2）出现场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E7%89%B9%E7%82%B9%E5%92%8C%E4%BD%9C%E7%94%A8"><span class="toc-number">5.1.3.</span> <span class="toc-text">（3）特点和作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-number">5.1.4.</span> <span class="toc-text">（4）解决方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%885%EF%BC%89%E6%8E%92%E6%9F%A5"><span class="toc-number">5.1.5.</span> <span class="toc-text">（5）排查</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B%EF%BC%88Orphan-Process%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">2. 孤儿进程（Orphan Process）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%AE%9A%E4%B9%89-1"><span class="toc-number">5.2.1.</span> <span class="toc-text">（1）定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%87%BA%E7%8E%B0%E5%9C%BA%E6%99%AF-1"><span class="toc-number">5.2.2.</span> <span class="toc-text">（2）出现场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E7%89%B9%E7%82%B9%E5%92%8C%E4%BD%9C%E7%94%A8-1"><span class="toc-number">5.2.3.</span> <span class="toc-text">（3）特点和作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95-1"><span class="toc-number">5.2.4.</span> <span class="toc-text">（4）解决方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%885%EF%BC%89%E6%8E%92%E6%9F%A5-1"><span class="toc-number">5.2.5.</span> <span class="toc-text">（5）排查</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget" id="card-poem"><div id="poem_sentence"></div><div id="poem_info"><div id="poem_dynasty"></div><div id="poem_author"></div></div></div><script src="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/jinrishici.js" charset="utf-8"></script><script type="text/javascript">jinrishici.load(function(result) {
+var sentence = document.querySelector("#poem_sentence")
+var author = document.querySelector("#poem_author")
+var dynasty = document.querySelector("#poem_dynasty")
+
+var sentenceText = result.data.content
+sentenceText = sentenceText.substr(0, sentenceText.length - 1);
+sentence.innerHTML = sentenceText
+dynasty.innerHTML = result.data.origin.dynasty
+author.innerHTML = result.data.origin.author + '《' + result.data.origin.title + '》'
+});</script><div class="card-widget card-calendar"><div class="card-content"><div class="item-headline"><i class="fas fa-calendar"></i><span>文章写作日历</span></div><div class="widget" id="calendar"></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/ppp.png);"><div id="footer-wrap"><!-- 定义网站上线日期，请将 '2023-01-01' 替换为你的网站实际上线日期--><div class="copyright">&copy;2019 - 2025 By 梦始<!-- 添加一行新的段落显示运行天数--><p>小破站已经安全运行 316 天</p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vanilla-lazyload/17.3.1/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'kxghUXJtVZdyXBt4VLHWbXjv-gzGzoHsz',
+      appKey: 'kRvx5uuFfMszFghHFIU8HTyY',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/valine/1.4.16/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script src="/js/jquery.min.js"></script><script data-pjax type="text/javascript" src="/js/languages.js"></script><script data-pjax type="text/javascript" src="/js/calendar.js"></script><script src="/js/pace.min.js" async></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="/js/imgloaded.js?1"></script><script src="/js/weather.js"></script><script defer src="/js/fish.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="(^з^),(￣∇￣),♪──Ｏ（≧∇≦）Ｏ───♪,ε=ε=ε=┌(;￣◇￣)┘,┬─┬ ノ( ゜-゜ノ)" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2025/03/03/正则表达式/" alt=""><img width="48" height="48" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-03-03</span><a class="blog-slider__title" href="2025/03/03/正则表达式/" alt="">正则表达式</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2025/03/03/正则表达式/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2025/03/01/HTML/" alt=""><img width="48" height="48" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-03-01</span><a class="blog-slider__title" href="2025/03/01/HTML/" alt="">HTML</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2025/03/01/HTML/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'index';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover1.webp);"> <a class="categoryBar-list-link" href="categories/Atcoder/">Atcoder</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">后端</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover2.webp);"> <a class="categoryBar-list-link" href="categories/codeforce题解/">codeforce题解</a><span class="categoryBar-list-count">7</span><span class="categoryBar-list-descr">Java</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover3.webp);"> <a class="categoryBar-list-link" href="categories/前端/">前端</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">Codeforce</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover4.webp);"> <a class="categoryBar-list-link" href="categories/计算机网络/">计算机网络</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">前端</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover5.webp);"> <a class="categoryBar-list-link" href="categories/Go/">Go</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">计算机网路</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover6.webp);"> <a class="categoryBar-list-link" href="categories/Java/">Java</a><span class="categoryBar-list-count">16</span><span class="categoryBar-list-descr">工具</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover6.webp);"> <a class="categoryBar-list-link" href="categories/后端/">后端</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr">算法</span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/算法/">算法</a><span class="categoryBar-list-count">12</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/工具/">工具</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/MySQL/">MySQL</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/git/">git</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/算法/数据结构/">数据结构</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/算法/图论/">图论</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/操作系统/">操作系统</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>
