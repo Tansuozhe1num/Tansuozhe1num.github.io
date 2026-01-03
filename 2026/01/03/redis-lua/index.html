@@ -1,0 +1,439 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>redis+lua | 梦始</title><meta name="author" content="梦始"><meta name="copyright" content="梦始"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Lua 的定位 轻量级脚本语言  解释执行  极其简单  嵌入式友好（Redis &#x2F; Nginx &#x2F; 游戏引擎）    最常见的 3 个地方     场景 用途     Redis 原子操作、事务逻辑   Nginx (OpenResty) 鉴权、限流、灰度   游戏服务器 配置、热更新     其操作保证原子性 基础语法变量&amp;类型1234local a &#x3D; 10    --numberl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis+lua">
+<meta property="og:url" content="https://tansuozhe1num.github.io/2026/01/03/redis-lua/index.html">
+<meta property="og:site_name" content="梦始">
+<meta property="og:description" content="Lua 的定位 轻量级脚本语言  解释执行  极其简单  嵌入式友好（Redis &#x2F; Nginx &#x2F; 游戏引擎）    最常见的 3 个地方     场景 用途     Redis 原子操作、事务逻辑   Nginx (OpenResty) 鉴权、限流、灰度   游戏服务器 配置、热更新     其操作保证原子性 基础语法变量&amp;类型1234local a &#x3D; 10    --numberl">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tansuozhe1num.github.io/img/ppp.png">
+<meta property="article:published_time" content="2026-01-03T04:37:53.000Z">
+<meta property="article:modified_time" content="2026-01-03T04:38:19.250Z">
+<meta property="article:author" content="梦始">
+<meta property="article:tag" content="分布式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tansuozhe1num.github.io/img/ppp.png"><link rel="shortcut icon" href="/img/ppp.png"><link rel="canonical" href="https://tansuozhe1num.github.io/2026/01/03/redis-lua/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'redis+lua',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/css/background.css"><link rel="stylesheet" href="/css/fonts.css"><link rel="stylesheet" href="/css/mousebutton.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/mainColor/heoMainColor.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/poem.css"><link rel="stylesheet" type="text/css" href="/css/fengche.css"><link rel="stylesheet" href="/css/imgloaded.css?1"><link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/zyoushuo/Blog@latest/hexo/css/loading_style_1.css" ><link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/zyoushuo/Blog@latest/hexo/css/loading_style_2.css" ><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-color: #efefef;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "/img/loading2.gif" data-lazy-src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/img/ppp.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">68</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/artitalk"><i class="fa-fw fas fa-lightbulb"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/ppp.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">梦始</span></a><a class="nav-page-title" href="/"><span class="site-name">redis+lua</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/artitalk"><i class="fa-fw fas fa-lightbulb"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">redis+lua</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-03T04:37:53.000Z" title="发表于 2026-01-03 12:37:53">2026-01-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-03T04:38:19.250Z" title="更新于 2026-01-03 12:38:19">2026-01-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="Lua-的定位"><a href="#Lua-的定位" class="headerlink" title="Lua 的定位"></a>Lua 的定位</h2><ul>
+<li><p><strong>轻量级脚本语言</strong></p>
+</li>
+<li><p>解释执行</p>
+</li>
+<li><p>极其简单</p>
+</li>
+<li><p>嵌入式友好（Redis / Nginx / 游戏引擎）</p>
+</li>
+</ul>
+<p> 最常见的 3 个地方</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Redis</td>
+<td>原子操作、事务逻辑</td>
+</tr>
+<tr>
+<td>Nginx (OpenResty)</td>
+<td>鉴权、限流、灰度</td>
+</tr>
+<tr>
+<td>游戏服务器</td>
+<td>配置、热更新</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>其操作保证原子性</p>
+<h2 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h2><h3 id="变量-amp-类型"><a href="#变量-amp-类型" class="headerlink" title="变量&amp;类型"></a>变量&amp;类型</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> a = <span class="number">10</span>    <span class="comment">--number</span></span><br><span class="line"><span class="keyword">local</span> b = <span class="string">&quot;hello&quot;</span> <span class="comment">--string</span></span><br><span class="line"><span class="keyword">local</span> c = <span class="literal">true</span>   <span class="comment">-- bool</span></span><br><span class="line"><span class="keyword">local</span> d = <span class="literal">nil</span>    <span class="comment">-- nil</span></span><br></pre></td></tr></table></figure>
+<p>Lua只有4种基本类型,<br>string -&gt; int<br>用tonumber</p>
+<p>Lua没有struct，map之类，全靠table实现:</p>
+<ul>
+<li><p>当数组用</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> arr = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line"><span class="built_in">print</span>(arr[<span class="number">1</span>])  <span class="comment">-- 1(下标从1开始)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当map用</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> m = &#123;&#125;</span><br><span class="line">m[<span class="string">&quot;xx&quot;</span>] = <span class="string">&quot;yy&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>混用</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> t = &#123;</span><br><span class="line">    a = <span class="number">1</span>,</span><br><span class="line">    b = <span class="number">2</span>,</span><br><span class="line">    [<span class="number">3</span>] = <span class="string">&quot;c&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>声明时候不加local默认全部是全局变量，官方建议所有变量加local</p>
+<h3 id="条件if-else"><a href="#条件if-else" class="headerlink" title="条件if else"></a>条件if else</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> count &gt; limit <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">elseif</span> a = <span class="number">1</span> <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h3 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">10</span> <span class="keyword">do</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> condition <span class="keyword">do</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span><span class="params">(a, b)</span></span> </span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="Go-redis-Lua-实现限流"><a href="#Go-redis-Lua-实现限流" class="headerlink" title="Go + redis + Lua 实现限流"></a>Go + redis + Lua 实现限流</h2><p>Go → Redis → Lua（单线程）→ 返回<br>调用方法:</p>
+<h4 id="1-滑动窗口限流"><a href="#1-滑动窗口限流" class="headerlink" title="1. 滑动窗口限流"></a>1. 滑动窗口限流</h4><p>新建一个脚本，实现滑动窗口限流<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> rateLimitLua = redis.NewScript(<span class="string">`</span></span><br><span class="line"><span class="string">local key = KEYS[1]  </span></span><br><span class="line"><span class="string">local now = tonumber(ARGV[1])  </span></span><br><span class="line"><span class="string">local window = tonumber(ARGV[2])  </span></span><br><span class="line"><span class="string">local limit = tonumber(ARGV[3])  </span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string">redis.call(&#x27;ZREMRANGEBYSCORE&#x27;, key, 0, now - window)  </span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string">local count = redis.call(&#x27;ZCARD&#x27;, key)  </span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string">if count &gt;= limit then  </span></span><br><span class="line"><span class="string">    return 0</span></span><br><span class="line"><span class="string">else  </span></span><br><span class="line"><span class="string">    -- member 必须唯一！  </span></span><br><span class="line"><span class="string">    redis.call(&#x27;ZADD&#x27;, key, now, now .. &#x27;-&#x27; .. math.random())    </span></span><br><span class="line"><span class="string">    redis.call(&#x27;PEXPIRE&#x27;, key, window)       </span></span><br><span class="line"><span class="string">    return 1</span></span><br><span class="line"><span class="string">end</span></span><br><span class="line"><span class="string">`</span>)</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 限流判断  </span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">allowRequest</span><span class="params">(key <span class="type">string</span>, limit <span class="type">int</span>, window time.Duration)</span></span> (<span class="type">bool</span>, <span class="type">error</span>) &#123;  </span><br><span class="line">    now := time.Now().UnixMilli()  </span><br><span class="line">  </span><br><span class="line">    res, err := rateLimitLua.Run(  </span><br><span class="line">       ctx,  </span><br><span class="line">       rds.Get(),  </span><br><span class="line">       []<span class="type">string</span>&#123;key&#125;,  </span><br><span class="line">       now,  </span><br><span class="line">       window.Milliseconds(),  </span><br><span class="line">       limit,  </span><br><span class="line">    ).Int()  </span><br><span class="line">  </span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;  </span><br><span class="line">       <span class="keyword">return</span> <span class="literal">false</span>, err  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="keyword">return</span> res == <span class="number">1</span>, <span class="literal">nil</span>  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Go对应接口中调用这个方法，对单一接口实现限流，实现了一个简单的限流接口，使用滑动窗口对单一ip进行次数检验，如果某段时间内调用接口次数过多，会被限流</p>
+<h4 id="2-令牌桶"><a href="#2-令牌桶" class="headerlink" title="2. 令牌桶"></a>2. 令牌桶</h4><blockquote>
+<p>思想： 系统以特定的速率往桶里放置令牌，请求来了拿到令牌就放行，拿不到就拒绝</p>
+</blockquote>
+<p>需要的数学模型<br><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">capacity      桶容量（最大令牌数）</span><br><span class="line">rate          令牌生成速率（token / second）</span><br><span class="line">tokens        当前令牌数</span><br><span class="line">last_time     上次补充令牌的时间</span><br></pre></td></tr></table></figure></p>
+<p>计算思路:</p>
+<ul>
+<li>计算距离上次的时间差 Δt</li>
+<li>新增令牌 = Δt × rate</li>
+<li>tokens = min(capacity, tokens + 新增)</li>
+<li>如果 tokens ≥ 1 → tokens -= 1，放行</li>
+<li>否则 → 拒绝</li>
+</ul>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- KEYS[1]  限流 key</span></span><br><span class="line"><span class="comment">-- ARGV[1]  当前时间戳（毫秒）</span></span><br><span class="line"><span class="comment">-- ARGV[2]  令牌生成速率（token / 秒）</span></span><br><span class="line"><span class="comment">-- ARGV[3]  桶容量</span></span><br><span class="line"><span class="comment">-- ARGV[4]  本次请求消耗的令牌数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> key = KEYS[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">local</span> now = <span class="built_in">tonumber</span>(ARGV[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">local</span> rate = <span class="built_in">tonumber</span>(ARGV[<span class="number">2</span>])</span><br><span class="line"><span class="keyword">local</span> capacity = <span class="built_in">tonumber</span>(ARGV[<span class="number">3</span>])</span><br><span class="line"><span class="keyword">local</span> cost = <span class="built_in">tonumber</span>(ARGV[<span class="number">4</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> res = redis.call(<span class="string">&#x27;HMGET&#x27;</span>, key, <span class="string">&#x27;tokens&#x27;</span>, <span class="string">&#x27;timestamp&#x27;</span>)</span><br><span class="line"><span class="keyword">local</span> tokens = res[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">local</span> last_time = res[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> tokens == <span class="literal">false</span> <span class="keyword">or</span> last_time == <span class="literal">false</span> <span class="keyword">then</span></span><br><span class="line">    tokens = capacity</span><br><span class="line">    last_time = now</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    tokens = <span class="built_in">tonumber</span>(tokens)</span><br><span class="line">    last_time = <span class="built_in">tonumber</span>(last_time)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 毫秒 → 秒</span></span><br><span class="line"><span class="keyword">local</span> delta = <span class="built_in">math</span>.<span class="built_in">max</span>(<span class="number">0</span>, now - last_time) / <span class="number">1000</span></span><br><span class="line"><span class="keyword">local</span> new_tokens = <span class="built_in">math</span>.<span class="built_in">min</span>(capacity, tokens + delta * rate)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> new_tokens &lt; cost <span class="keyword">then</span></span><br><span class="line">    redis.call(<span class="string">&#x27;HMSET&#x27;</span>, key,</span><br><span class="line">        <span class="string">&#x27;tokens&#x27;</span>, new_tokens,</span><br><span class="line">        <span class="string">&#x27;timestamp&#x27;</span>, now</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    redis.call(<span class="string">&#x27;HMSET&#x27;</span>, key,</span><br><span class="line">        <span class="string">&#x27;tokens&#x27;</span>, new_tokens - cost,</span><br><span class="line">        <span class="string">&#x27;timestamp&#x27;</span>, now</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>手写踩坑：HMGET为空的时候返回的是false，不是nil，nil会炸<br>Go封装:</p>
+<p>tokenBuctet.Go</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> auth</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">&quot;context&quot;</span></span><br><span class="line">  <span class="string">&quot;fmt&quot;</span></span><br><span class="line">  redis2 <span class="string">&quot;github.com/redis/go-redis/v9&quot;</span></span><br><span class="line">  constance <span class="string">&quot;novel-launch/novel/Biu/const&quot;</span></span><br><span class="line">  <span class="string">&quot;novel-launch/novel/resource&quot;</span></span><br><span class="line">  <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> tokenBucketLuaScript = <span class="string">`</span></span><br><span class="line"><span class="string">-- KEYS[1]  限流 key</span></span><br><span class="line"><span class="string">-- ARGV[1]  当前时间戳（毫秒）</span></span><br><span class="line"><span class="string">-- ARGV[2]  令牌生成速率（token / 秒）</span></span><br><span class="line"><span class="string">-- ARGV[3]  桶容量</span></span><br><span class="line"><span class="string">-- ARGV[4]  本次请求消耗的令牌数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">local key = KEYS[1]</span></span><br><span class="line"><span class="string">local now = tonumber(ARGV[1])</span></span><br><span class="line"><span class="string">local rate = tonumber(ARGV[2])</span></span><br><span class="line"><span class="string">local capacity = tonumber(ARGV[3])</span></span><br><span class="line"><span class="string">local cost = tonumber(ARGV[4])</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">local res = redis.call(&#x27;HMGET&#x27;, key, &#x27;tokens&#x27;, &#x27;timestamp&#x27;)</span></span><br><span class="line"><span class="string">local tokens = res[1]</span></span><br><span class="line"><span class="string">local last_time = res[2]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">if tokens == false or last_time == false then</span></span><br><span class="line"><span class="string">    tokens = capacity</span></span><br><span class="line"><span class="string">    last_time = now</span></span><br><span class="line"><span class="string">else</span></span><br><span class="line"><span class="string">    tokens = tonumber(tokens)</span></span><br><span class="line"><span class="string">    last_time = tonumber(last_time)</span></span><br><span class="line"><span class="string">end</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">-- 毫秒 → 秒</span></span><br><span class="line"><span class="string">local delta = math.max(0, now - last_time) / 1000</span></span><br><span class="line"><span class="string">local new_tokens = math.min(capacity, tokens + delta * rate)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">if new_tokens &lt; cost then</span></span><br><span class="line"><span class="string">    redis.call(&#x27;HMSET&#x27;, key,</span></span><br><span class="line"><span class="string">        &#x27;tokens&#x27;, new_tokens,</span></span><br><span class="line"><span class="string">        &#x27;timestamp&#x27;, now</span></span><br><span class="line"><span class="string">    )</span></span><br><span class="line"><span class="string">    return 0</span></span><br><span class="line"><span class="string">else</span></span><br><span class="line"><span class="string">    redis.call(&#x27;HMSET&#x27;, key,</span></span><br><span class="line"><span class="string">        &#x27;tokens&#x27;, new_tokens - cost,</span></span><br><span class="line"><span class="string">        &#x27;timestamp&#x27;, now</span></span><br><span class="line"><span class="string">    )</span></span><br><span class="line"><span class="string">    return 1</span></span><br><span class="line"><span class="string">end</span></span><br><span class="line"><span class="string">`</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// AllowRequest 令牌桶限流</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">AllowRequest</span><span class="params">(ctx context.Context, key <span class="type">string</span>, rate <span class="type">float64</span>, capacity <span class="type">int</span>)</span></span> (<span class="type">bool</span>, <span class="type">error</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> key == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>, <span class="literal">nil</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> rate &lt; <span class="number">0</span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;warning: token rate &lt; 0&quot;</span>)</span><br><span class="line">    rate = constance.TokenRate</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> capacity &lt; <span class="number">0</span> || capacity &gt; <span class="number">1000000</span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;warning: token capacity must be reset&quot;</span>)</span><br><span class="line">    capacity = constance.TokenCapacity</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  tokenBucketLua := redis2.NewScript(tokenBucketLuaScript)</span><br><span class="line">  res, err := tokenBucketLua.Run(</span><br><span class="line">    ctx,</span><br><span class="line">    resource.Rdscli,</span><br><span class="line">    []<span class="type">string</span>&#123;key&#125;,</span><br><span class="line">    time.Now().UnixMilli(),</span><br><span class="line">    rate, <span class="comment">// token / 秒</span></span><br><span class="line">    capacity,</span><br><span class="line">    <span class="number">1</span>,</span><br><span class="line">  ).Int64()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>, err</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> res == <span class="number">1</span>, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>使用时候在接口运行入口处加上Allow验证，1放行，0拦截</p>
+<hr>
+<p>cpp脚本模拟接口调用<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">curlRequest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    FILE* fp = <span class="built_in">popen</span>(</span><br><span class="line">        <span class="string">&quot;curl -s -o /dev/null -w \&quot;%&#123;http_code&#125;\&quot; http://localhost:8080/getDetail&quot;</span>,</span><br><span class="line">        <span class="string">&quot;r&quot;</span></span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">if</span> (!fp) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> buf[<span class="number">16</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="built_in">fgets</span>(buf, <span class="built_in">sizeof</span>(buf), fp);</span><br><span class="line">    <span class="built_in">pclose</span>(fp);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> std::<span class="built_in">atoi</span>(buf);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> N = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">httpCodes</span><span class="params">(N)</span></span>;</span><br><span class="line">    std::vector&lt;std::thread&gt; threads;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">        threads.<span class="built_in">emplace_back</span>([i, &amp;httpCodes]() &#123;</span><br><span class="line">            httpCodes[i] = <span class="built_in">curlRequest</span>();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; t : threads) &#123;</span><br><span class="line">        t.<span class="built_in">join</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 按顺序输出</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;==== HTTP Codes (ordered) ====&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;req &quot;</span> &lt;&lt; i &lt;&lt; <span class="string">&quot; -&gt; &quot;</span> &lt;&lt; httpCodes[i] &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可看到后面的输出429，被限流了</p>
+<hr>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>Redis Lua <strong>硬限制</strong>：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>限制</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>不能 sleep</td>
+<td>会阻塞 Redis</td>
+</tr>
+<tr>
+<td>不能访问网络</td>
+<td>保证确定性</td>
+</tr>
+<tr>
+<td>不能有无限循环</td>
+<td>防止卡死</td>
+</tr>
+<tr>
+<td>不能调用非确定性函数</td>
+<td>一致性问题</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>redisLua会把redis卡死，所以要有lua-time-limit</p>
+<hr>
+<h2 id="Go-redis-Lua-实现分布式锁"><a href="#Go-redis-Lua-实现分布式锁" class="headerlink" title="Go + redis + Lua 实现分布式锁"></a>Go + redis + Lua 实现分布式锁</h2><p>为什么要有这个东西？</p>
+<p>单机实例容器加锁时候不必考虑多实例问题，只需要直接加锁，比如平时咱自己写的项目，相对某个东西限制并发，就直接对他枷锁，但是当有多个集群都需要拿到或者修改同一个实例的东西时候，就不能直接在某个单实例集群里面加锁了，需要有一个能管理所有集群的或者是不在这些集群运行里面的单独中间件来操作，这里用redis实现分布式锁最合理，因为redis满足上面所有条件，是独立于运行集群的单独实例</p>
+<p>使用redis + lua实现分布式锁，了解了redis + lua使用方法后，这件事情就变成了在redis上存一个变量，用这个变量来标识锁是否存在，实现资源的控制</p>
+<p>一般来说，可以直接用redis setnx来设置一个变量实现锁的功能，但是这样只能上锁，无法控制锁的释放和安全性，因为不是原子操作，例如：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setnx lock 1</span><br><span class="line"></span><br><span class="line">expire lock 10</span><br></pre></td></tr></table></figure></p>
+<p>setnx后进程刚刚好挂了<br>expire没操作</p>
+<p>lock没有释放<br>出现死锁</p>
+<p>lua的原子性恰好补足了这一缺点<br>加锁<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis.call(<span class="string">&quot;SET&quot;</span>, KEYS[<span class="number">1</span>], ARGV[<span class="number">1</span>], <span class="string">&quot;NX&quot;</span>, <span class="string">&quot;EX&quot;</span>, ARGV[<span class="number">2</span>])</span><br></pre></td></tr></table></figure></p>
+<p>解锁：<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> redis.call(<span class="string">&quot;GET&quot;</span>, KEYS[<span class="number">1</span>]) == ARGV[<span class="number">1</span>] <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> redis.call(<span class="string">&quot;DEL&quot;</span>, KEYS[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>锁的 value 是 <strong>唯一标识（UUID）</strong></li>
+<li><strong>只有 owner 才能删除</strong></li>
+<li><code>GET + DEL</code> <strong>原子执行</strong></li>
+</ul>
+<p>实际使用场景</p>
+<h3 id="场景-1：定时任务防止重复执行"><a href="#场景-1：定时任务防止重复执行" class="headerlink" title="场景 1：定时任务防止重复执行"></a>场景 1：定时任务防止重复执行</h3><h4 id="真实背景"><a href="#真实背景" class="headerlink" title="真实背景"></a>真实背景</h4><ul>
+<li>服务部署 5 个实例</li>
+<li>用 XXL-JOB / Cron / Kubernetes CronJob</li>
+<li>到点后 <strong>5 个实例同时触发</strong><h4 id="如果没有分布式锁"><a href="#如果没有分布式锁" class="headerlink" title="如果没有分布式锁"></a>如果没有分布式锁</h4></li>
+</ul>
+<p><code>实例 A：执行任务 实例 B：执行任务 实例 C：执行任务</code></p>
+<p><strong>同一任务被执行 5 次</strong></p>
+<ul>
+<li>重复发消息</li>
+<li>重复跑脚本</li>
+<li>重复生成数据</li>
+</ul>
+<h4 id="分布式锁在保护什么？"><a href="#分布式锁在保护什么？" class="headerlink" title="分布式锁在保护什么？"></a>分布式锁在保护什么？</h4><blockquote>
+<p><strong>“这个时间点，只允许一个实例执行”</strong></p>
+</blockquote>
+<hr>
+<h3 id="场景-2：订单-支付回调"><a href="#场景-2：订单-支付回调" class="headerlink" title="场景 2：订单 / 支付回调"></a>场景 2：订单 / 支付回调</h3><h4 id="真实背景-1"><a href="#真实背景-1" class="headerlink" title="真实背景"></a>真实背景</h4><ul>
+<li>支付平台 <strong>回调可能重复</strong></li>
+<li>用户也可能手动重试<h4 id="没锁会发生什么？"><a href="#没锁会发生什么？" class="headerlink" title="没锁会发生什么？"></a>没锁会发生什么？</h4><code>第一次回调：扣库存、记账 第二次回调：再扣一次</code><br><strong>直接资损</strong><h4 id="锁在保护什么？"><a href="#锁在保护什么？" class="headerlink" title="锁在保护什么？"></a>锁在保护什么？</h4></li>
+</ul>
+<blockquote>
+<p><strong>“一次业务逻辑，只能成功执行一次”</strong></p>
+</blockquote>
+<h3 id="场景-3：缓存重建（经典缓存击穿）"><a href="#场景-3：缓存重建（经典缓存击穿）" class="headerlink" title="场景 3：缓存重建（经典缓存击穿）"></a>场景 3：缓存重建（经典缓存击穿）</h3><h4 id="真实背景-2"><a href="#真实背景-2" class="headerlink" title="真实背景"></a>真实背景</h4><ul>
+<li>热 key 过期</li>
+<li>瞬间 1000 个请求进来</li>
+</ul>
+<h4 id="没锁的后果"><a href="#没锁的后果" class="headerlink" title="没锁的后果"></a>没锁的后果</h4><p><code>1000 个请求 → 1000 次 DB 查询</code></p>
+<h4 id="加锁"><a href="#加锁" class="headerlink" title="加锁"></a>加锁</h4><p><code>1 个请求重建缓存 999 个等待 / 返回旧值</code></p>
+<h4 id="锁在保护什么？-1"><a href="#锁在保护什么？-1" class="headerlink" title="锁在保护什么？"></a>锁在保护什么？</h4><blockquote>
+<p><strong>“同一时刻，只允许一个人查 DB 回源”</strong></p>
+</blockquote>
+<hr>
+<h3 id="场景-4：库存扣减-名额占用"><a href="#场景-4：库存扣减-名额占用" class="headerlink" title="场景 4：库存扣减 / 名额占用"></a>场景 4：库存扣减 / 名额占用</h3><h4 id="真实背景-3"><a href="#真实背景-3" class="headerlink" title="真实背景"></a>真实背景</h4><ul>
+<li>抢课</li>
+<li>抢优惠券</li>
+<li>抢名额<h4 id="没锁"><a href="#没锁" class="headerlink" title="没锁"></a>没锁</h4></li>
+<li>超卖</li>
+<li>状态错乱<h3 id="场景-5：分布式-ID-序列生成"><a href="#场景-5：分布式-ID-序列生成" class="headerlink" title="场景 5：分布式 ID / 序列生成"></a>场景 5：分布式 ID / 序列生成</h3><h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4></li>
+<li>多节点生成唯一号</li>
+<li>严格递增<br>全局唯一性 + 顺序性</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="Dreamstart">梦始</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://tansuozhe1num.github.io/2026/01/03/redis-lua/">https://tansuozhe1num.github.io/2026/01/03/redis-lua/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Tansuozhe1num.github.io" target="_blank">梦始</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></div><div class="post-share"><div class="social-share" data-image="/img/ppp.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/12/21/ElasticSearch%E5%9F%BA%E7%A1%80/" title="ElasticSearch基础"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">ElasticSearch基础</div></div><div class="info-2"><div class="info-item-1">es安装使用docker安装es 拉取镜像 1docker pull elasticsearch:7.12.0 创建docker容器挂在的目录： (windows手动创建) 1234# linux的命令mkdir -p /opt/es/config &amp; mkdir -p /opt/es/data &amp; mkdir -p /opt/es/pluginschmod 777 /opt/es/data 配置文件 1echo &quot;http.host: 0.0.0.0&quot; &gt; /opt/es/config/elasticsearch.yml 创建容器 123456# linuxdocker run --name es -p 9200:9200  -p 9300:9300 -e &quot;discovery.type=single-node&quot; -e ES_JAVA_OPTS=&quot;-Xms84m -Xmx512m&quot; -v...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src= "/img/loading2.gif" data-lazy-src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/img/ppp.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">梦始</div><div class="author-info-description">“今朝有酒，何妨纵歌！”</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">68</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Tansuozhe1num"><i class="fab fa-github"></i><span>闲来饮茶</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Keep programming, keep progressing</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Lua-%E7%9A%84%E5%AE%9A%E4%BD%8D"><span class="toc-number">1.</span> <span class="toc-text">Lua 的定位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">基础语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E9%87%8F-amp-%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.1.</span> <span class="toc-text">变量&amp;类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6if-else"><span class="toc-number">2.2.</span> <span class="toc-text">条件if else</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF"><span class="toc-number">2.3.</span> <span class="toc-text">循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0"><span class="toc-number">2.4.</span> <span class="toc-text">函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-redis-Lua-%E5%AE%9E%E7%8E%B0%E9%99%90%E6%B5%81"><span class="toc-number">3.</span> <span class="toc-text">Go + redis + Lua 实现限流</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E9%99%90%E6%B5%81"><span class="toc-number">3.0.1.</span> <span class="toc-text">1. 滑动窗口限流</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%BB%A4%E7%89%8C%E6%A1%B6"><span class="toc-number">3.0.2.</span> <span class="toc-text">2. 令牌桶</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F"><span class="toc-number">4.</span> <span class="toc-text">注意</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go-redis-Lua-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-number">5.</span> <span class="toc-text">Go + redis + Lua 实现分布式锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF-1%EF%BC%9A%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E9%98%B2%E6%AD%A2%E9%87%8D%E5%A4%8D%E6%89%A7%E8%A1%8C"><span class="toc-number">5.1.</span> <span class="toc-text">场景 1：定时任务防止重复执行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9C%9F%E5%AE%9E%E8%83%8C%E6%99%AF"><span class="toc-number">5.1.1.</span> <span class="toc-text">真实背景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E6%B2%A1%E6%9C%89%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-number">5.1.2.</span> <span class="toc-text">如果没有分布式锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%9C%A8%E4%BF%9D%E6%8A%A4%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">5.1.3.</span> <span class="toc-text">分布式锁在保护什么？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF-2%EF%BC%9A%E8%AE%A2%E5%8D%95-%E6%94%AF%E4%BB%98%E5%9B%9E%E8%B0%83"><span class="toc-number">5.2.</span> <span class="toc-text">场景 2：订单 &#x2F; 支付回调</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9C%9F%E5%AE%9E%E8%83%8C%E6%99%AF-1"><span class="toc-number">5.2.1.</span> <span class="toc-text">真实背景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B2%A1%E9%94%81%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">5.2.2.</span> <span class="toc-text">没锁会发生什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%81%E5%9C%A8%E4%BF%9D%E6%8A%A4%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">5.2.3.</span> <span class="toc-text">锁在保护什么？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF-3%EF%BC%9A%E7%BC%93%E5%AD%98%E9%87%8D%E5%BB%BA%EF%BC%88%E7%BB%8F%E5%85%B8%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">场景 3：缓存重建（经典缓存击穿）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9C%9F%E5%AE%9E%E8%83%8C%E6%99%AF-2"><span class="toc-number">5.3.1.</span> <span class="toc-text">真实背景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B2%A1%E9%94%81%E7%9A%84%E5%90%8E%E6%9E%9C"><span class="toc-number">5.3.2.</span> <span class="toc-text">没锁的后果</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A0%E9%94%81"><span class="toc-number">5.3.3.</span> <span class="toc-text">加锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%81%E5%9C%A8%E4%BF%9D%E6%8A%A4%E4%BB%80%E4%B9%88%EF%BC%9F-1"><span class="toc-number">5.3.4.</span> <span class="toc-text">锁在保护什么？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF-4%EF%BC%9A%E5%BA%93%E5%AD%98%E6%89%A3%E5%87%8F-%E5%90%8D%E9%A2%9D%E5%8D%A0%E7%94%A8"><span class="toc-number">5.4.</span> <span class="toc-text">场景 4：库存扣减 &#x2F; 名额占用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9C%9F%E5%AE%9E%E8%83%8C%E6%99%AF-3"><span class="toc-number">5.4.1.</span> <span class="toc-text">真实背景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B2%A1%E9%94%81"><span class="toc-number">5.4.2.</span> <span class="toc-text">没锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF-5%EF%BC%9A%E5%88%86%E5%B8%83%E5%BC%8F-ID-%E5%BA%8F%E5%88%97%E7%94%9F%E6%88%90"><span class="toc-number">5.5.</span> <span class="toc-text">场景 5：分布式 ID &#x2F; 序列生成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">5.5.1.</span> <span class="toc-text">背景</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/ppp.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By 梦始</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vanilla-lazyload/17.3.1/lazyload.iife.min.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'kxghUXJtVZdyXBt4VLHWbXjv-gzGzoHsz',
+      appKey: 'kRvx5uuFfMszFghHFIU8HTyY',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/valine/1.4.16/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script src="/js/jquery.min.js"></script><script data-pjax type="text/javascript" src="/js/languages.js"></script><script data-pjax type="text/javascript" src="/js/calendar.js"></script><script src="/js/pace.min.js" async></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="/js/imgloaded.js?1"></script><script src="/js/weather.js"></script><script defer src="/js/fish.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="(^з^),(￣∇￣),♪──Ｏ（≧∇≦）Ｏ───♪,ε=ε=ε=┌(;￣◇￣)┘,┬─┬ ノ( ゜-゜ノ)" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover1.webp);"> <a class="categoryBar-list-link" href="categories/codeforce题解/">codeforce题解</a><span class="categoryBar-list-count">9</span><span class="categoryBar-list-descr">后端</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover2.webp);"> <a class="categoryBar-list-link" href="categories/Atcoder/">Atcoder</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">Java</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover3.webp);"> <a class="categoryBar-list-link" href="categories/后端/">后端</a><span class="categoryBar-list-count">8</span><span class="categoryBar-list-descr">Codeforce</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover4.webp);"> <a class="categoryBar-list-link" href="categories/计算机网络/">计算机网络</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">前端</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover5.webp);"> <a class="categoryBar-list-link" href="categories/ElasticSearch/">ElasticSearch</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">计算机网路</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover6.webp);"> <a class="categoryBar-list-link" href="categories/前端/">前端</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">工具</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover6.webp);"> <a class="categoryBar-list-link" href="categories/Golang/">Golang</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">算法</span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/Java/">Java</a><span class="categoryBar-list-count">16</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/并发/">并发</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/算法/">算法</a><span class="categoryBar-list-count">12</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/MySQL/">MySQL</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/RPC/">RPC</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/git/">git</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/工具/">工具</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/分布式/">分布式</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/算法/图论/">图论</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/算法/数据结构/">数据结构</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/操作系统/">操作系统</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2025/03/03/正则表达式/" alt=""><img width="48" height="48" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-03-03</span><a class="blog-slider__title" href="2025/03/03/正则表达式/" alt="">正则表达式</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2025/03/03/正则表达式/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2025/03/01/HTML/" alt=""><img width="48" height="48" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-03-01</span><a class="blog-slider__title" href="2025/03/01/HTML/" alt="">HTML</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2025/03/01/HTML/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'index';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>
