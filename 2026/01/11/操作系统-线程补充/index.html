@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>操作系统 --进程补充 | 梦始</title><meta name="author" content="梦始"><meta name="copyright" content="梦始"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="线程是一个基本的CPU执行单元，也是程序执行流的最小单位。引入线程之后，不仅是进程之间可以并发，进程内的各线程之间也可以并发，从而进一步提升了系统的并发度，使得一个进程内也可以并发处理各种任务（如QQ视频、文字聊天、传文件)  1. 用户级线程用户级线程是由用户态线程库创建、调度和管理的线程，内核对其不可见，内核只知道进程的存在。 常见线程库：  早期 POSIX 线程实现 协程（corouti">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统 --进程补充">
+<meta property="og:url" content="https://tansuozhe1num.github.io/2026/01/11/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/index.html">
+<meta property="og:site_name" content="梦始">
+<meta property="og:description" content="线程是一个基本的CPU执行单元，也是程序执行流的最小单位。引入线程之后，不仅是进程之间可以并发，进程内的各线程之间也可以并发，从而进一步提升了系统的并发度，使得一个进程内也可以并发处理各种任务（如QQ视频、文字聊天、传文件)  1. 用户级线程用户级线程是由用户态线程库创建、调度和管理的线程，内核对其不可见，内核只知道进程的存在。 常见线程库：  早期 POSIX 线程实现 协程（corouti">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tansuozhe1num.github.io/img/ppp.png">
+<meta property="article:published_time" content="2026-01-11T08:07:20.000Z">
+<meta property="article:modified_time" content="2026-01-11T08:08:02.913Z">
+<meta property="article:author" content="梦始">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tansuozhe1num.github.io/img/ppp.png"><link rel="shortcut icon" href="/img/ppp.png"><link rel="canonical" href="https://tansuozhe1num.github.io/2026/01/11/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '操作系统 --进程补充',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/css/background.css"><link rel="stylesheet" href="/css/fonts.css"><link rel="stylesheet" href="/css/mousebutton.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/mainColor/heoMainColor.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/poem.css"><link rel="stylesheet" type="text/css" href="/css/fengche.css"><link rel="stylesheet" href="/css/imgloaded.css?1"><link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/zyoushuo/Blog@latest/hexo/css/loading_style_1.css" ><link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/zyoushuo/Blog@latest/hexo/css/loading_style_2.css" ><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-color: #efefef;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "/img/loading2.gif" data-lazy-src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/img/ppp.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/artitalk"><i class="fa-fw fas fa-lightbulb"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/ppp.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">梦始</span></a><a class="nav-page-title" href="/"><span class="site-name">操作系统 --进程补充</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/artitalk"><i class="fa-fw fas fa-lightbulb"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">操作系统 --进程补充</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-11T08:07:20.000Z" title="发表于 2026-01-11 16:07:20">2026-01-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-11T08:08:02.913Z" title="更新于 2026-01-11 16:08:02">2026-01-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">961</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><blockquote>
+<p>线程是一个基本的CPU执行单元，也是程序执行流的最小单位。引入线程之后，不仅是进程之间可以并发，进程内的各线程之间也可以并发，从而进一步提升了系统的并发度，使得一个进程内也可以并发处理各种任务（如QQ视频、文字聊天、传文件)</p>
+</blockquote>
+<h3 id="1-用户级线程"><a href="#1-用户级线程" class="headerlink" title="1. 用户级线程"></a>1. 用户级线程</h3><p>用户级线程是由用户态线程库创建、调度和管理的线程，内核对其不可见，内核只知道进程的存在。</p>
+<p>常见线程库：</p>
+<ul>
+<li>早期 POSIX 线程实现</li>
+<li>协程（coroutine）</li>
+<li>Go 的 goroutine（本质是用户级调度）</li>
+</ul>
+<p>从内核视角看，只能看到进程A， 而从用户视角看可以看到进程A，以及下面的线程1， 2， 3…</p>
+<h3 id="2-内核级线程"><a href="#2-内核级线程" class="headerlink" title="2. 内核级线程"></a>2. 内核级线程</h3><p>内核级线程是由操作系统内核直接创建、调度和管理的线程，每个线程都是内核调度的基本单位。</p>
+<p>操作系统是可以明确感知内核级线程的存在的，实际上再linux系统里面，内核级线程是轻量的进程，都是用clone出来的，只是分配的资源少？</p>
+<h3 id="3-二者比较"><a href="#3-二者比较" class="headerlink" title="3. 二者比较"></a>3. 二者比较</h3><p>用户级线程: <strong>开销小</strong>，但是由于操作系统感知不到他的存在，所以一旦一个线程阻塞，那么整个进程内其他线程都会<strong>阻塞</strong>，（一般情况下涉及到内核态完成的功能必须由内核级线程完成，所以一般用户级线程会有内核级线程与其配合，传统一般是N:1模型，也就是N和用户级线程对应1个内核级线程），所以用户级线程非常适用于</p>
+<ul>
+<li>计算密集型</li>
+<li>少I/O切换</li>
+<li>高并发调度</li>
+<li>少系统调用<br>的场景，<br>现实的场景： Java的虚拟线程， Go的goroutine， 但是Go由GMP模型，不是简单传统的N : 1用户级线程，本质是M : N的用户级别线程,详细看下面理解</li>
+</ul>
+<p>内核级线程<strong>开销大</strong>，但是由于操作系统可以感知，所以不会出现阻塞问题，适用于</p>
+<ul>
+<li>I / O 密集型</li>
+<li>需要频繁阻塞系统调度</li>
+<li>需要利用多核CPU<br>典型的例子:<br>数据库，桌面应用，Web服务器（大量的IO操作）</li>
+</ul>
+<h3 id="Go的GMP"><a href="#Go的GMP" class="headerlink" title="Go的GMP"></a>Go的GMP</h3><p>Go的goroutine本质是用户级线程，但采用了类似M : N的GMP模型。</p>
+<p>GMP：<br>    Go 的 goroutine 本质是用户级线程，但采用了 M:N 的 G-P-M 调度模型。<br>    G 是 goroutine，P 是调度资源和本地任务队列，负责管理多个 G；M 是 Go runtime 管理的 OS 线程（内核线程），作为 G 的实际执行载体。<br>    每个 M 拥有一个 G0 作为调度和系统调用的执行上下文，多个 G 会轮流运行在同一个 M 上；当 G 发起系统调用导致 M 阻塞时，runtime 会将 P 从该 M 上剥离并交给新的 M，保证其他 G 继续执行。<br>    调度逻辑主要位于 runtime/proc.go 中，通过 schedule → findRunnable → execute 流程完成，findRunnable 按本地 runq、全局 runq、netpoll、work stealing 的顺序查找可运行的 G，从而保持各 P 之间负载相对均衡。</p>
+<p>P的运行机制：<br>源码位置:<br>runtime/src/proc.go<br>看的顺序:<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">schedule()        // 主调度循环</span><br><span class="line">findRunnable()    // 找可运行的 G</span><br><span class="line">execute()         // 切换并执行 G</span><br><span class="line">goexit()          // G 结束</span><br><span class="line">entersyscall()    // 进入系统调用</span><br><span class="line">exitsyscall()     // 退出系统调用</span><br></pre></td></tr></table></figure></p>
+<p>schedule： Go的心跳：找个可以运行的G，然后运行G<br>findRunnable: schedule的第一步，找到可以运行的G，顺序<br><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 本地 P.runq</span><br><span class="line">2. 全局 runq</span><br><span class="line">3. 网络轮询（netpoll）</span><br><span class="line">4. 从其他 P 偷取（work stealing）</span><br></pre></td></tr></table></figure><br>这里第四步会使得多个P的任务始终保持相对平衡的数量</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="Dreamstart">梦始</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://tansuozhe1num.github.io/2026/01/11/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/">https://tansuozhe1num.github.io/2026/01/11/操作系统-线程补充/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Tansuozhe1num.github.io" target="_blank">梦始</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><div class="post-share"><div class="social-share" data-image="/img/ppp.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/01/03/redis-lua/" title="redis+lua"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">redis+lua</div></div><div class="info-2"><div class="info-item-1">Lua 的定位 轻量级脚本语言  解释执行  极其简单  嵌入式友好（Redis / Nginx / 游戏引擎）    最常见的 3 个地方     场景 用途     Redis 原子操作、事务逻辑   Nginx (OpenResty) 鉴权、限流、灰度   游戏服务器 配置、热更新     其操作保证原子性 基础语法变量&amp;类型1234local a = 10    --numberlocal b = &quot;hello&quot; --stringlocal c = true   -- boollocal d = nil    -- nil Lua只有4种基本类型,string -&gt; int用tonumber Lua没有struct，map之类，全靠table实现:  当数组用 12local arr = &#123;1, 2, 3&#125;print(arr[1])  -- 1(下标从1开始)  当map用 12local m = &#123;&#125;m[&quot;xx&quot;] =...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%9F%BA%E7%A1%80%E7%AF%87/" title="操作系统 --基础篇"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-02</div><div class="info-item-2">操作系统 --基础篇</div></div><div class="info-2"><div class="info-item-1">操作系统的内核（Kernel）和中央处理器（CPU，Central Processing Unit）区别：  操作系统的内核（Kernel）属于操作系统层面，而 CPU 属于硬件。 CPU 主要提供运算，处理各种指令的能力。内核（Kernel）主要负责系统管理比如内存管理，它屏蔽了对硬件的操作。  下图清晰说明了应用程序、内核、CPU 这三者的关系。   用户态和内核态 用户态： 用户态运行的进程可以直接读取用户程序的数据，拥有较低的权限，当需要执行某些特殊权限的时候，例如读写磁盘，网络通信，就需要向操作系统申请资源权限。   内核态： 内核态的权限很大，几乎可以完成对系统的所有操作 操作系统得到指令后，会从用户态转移到内核态，执行对磁盘的操作后将结果返回进程，后转回用户态 虽然拥有更高的权限，但是由于进入内核态时候的上下游调用，开销花费较大，所以要尽量减少进入内核态的次数    用户态： 应用程序，库函数内核态： 进程管理，网络管理，数据管理，内核管理， 设备管理 为什么要有用户态，只要一个内核态不行吗？答：  内核态：CPU...</div></div></div></a><a class="pagination-related" href="/2025/10/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B%E7%AF%87/" title="操作系统 --进程与线程篇"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-02</div><div class="info-item-2">操作系统 --进程与线程篇</div></div><div class="info-2"><div class="info-item-1">进程和线程区别 进程（Process）      操作系统资源分配的基本单位 每个进程有自己独立的地址空间（代码段、数据段、堆、栈） 程序一旦运行，就会至少有一个进程 切换开销大，因为需要切换整个内存地址空间、文件描述符等上下文   线程（Thread）  程序执行的最小单位，是 CPU 调度的基本单位 一个进程可以包含多个线程         线程共享进程的地址空间，但有自己独立的栈和寄存器 切换开销小，多个线程共享进程资源，只需切换少量上下文（寄存器、栈指针）    👉 直观类比：  进程 = 公司（独立运作，有资源） 线程 = 公司里的员工（共享公司资源，但干不同的活）  ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src= "/img/loading2.gif" data-lazy-src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/img/ppp.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">梦始</div><div class="author-info-description">“今朝有酒，何妨纵歌！”</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Tansuozhe1num"><i class="fab fa-github"></i><span>闲来饮茶</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Keep programming, keep progressing</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%94%A8%E6%88%B7%E7%BA%A7%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">1. 用户级线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%86%85%E6%A0%B8%E7%BA%A7%E7%BA%BF%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">2. 内核级线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BA%8C%E8%80%85%E6%AF%94%E8%BE%83"><span class="toc-number">3.</span> <span class="toc-text">3. 二者比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Go%E7%9A%84GMP"><span class="toc-number">4.</span> <span class="toc-text">Go的GMP</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/ppp.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By 梦始</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vanilla-lazyload/17.3.1/lazyload.iife.min.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'kxghUXJtVZdyXBt4VLHWbXjv-gzGzoHsz',
+      appKey: 'kRvx5uuFfMszFghHFIU8HTyY',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/valine/1.4.16/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script src="/js/jquery.min.js"></script><script data-pjax type="text/javascript" src="/js/languages.js"></script><script data-pjax type="text/javascript" src="/js/calendar.js"></script><script src="/js/pace.min.js" async></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="/js/imgloaded.js?1"></script><script src="/js/weather.js"></script><script defer src="/js/fish.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="(^з^),(￣∇￣),♪──Ｏ（≧∇≦）Ｏ───♪,ε=ε=ε=┌(;￣◇￣)┘,┬─┬ ノ( ゜-゜ノ)" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2025/03/03/正则表达式/" alt=""><img width="48" height="48" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-03-03</span><a class="blog-slider__title" href="2025/03/03/正则表达式/" alt="">正则表达式</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2025/03/03/正则表达式/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2025/03/01/HTML/" alt=""><img width="48" height="48" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-03-01</span><a class="blog-slider__title" href="2025/03/01/HTML/" alt="">HTML</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2025/03/01/HTML/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'index';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover1.webp);"> <a class="categoryBar-list-link" href="categories/codeforce题解/">codeforce题解</a><span class="categoryBar-list-count">9</span><span class="categoryBar-list-descr">后端</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover2.webp);"> <a class="categoryBar-list-link" href="categories/Atcoder/">Atcoder</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">Java</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover3.webp);"> <a class="categoryBar-list-link" href="categories/后端/">后端</a><span class="categoryBar-list-count">8</span><span class="categoryBar-list-descr">Codeforce</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover4.webp);"> <a class="categoryBar-list-link" href="categories/计算机网络/">计算机网络</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">前端</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover5.webp);"> <a class="categoryBar-list-link" href="categories/ElasticSearch/">ElasticSearch</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">计算机网路</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover6.webp);"> <a class="categoryBar-list-link" href="categories/前端/">前端</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">工具</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover6.webp);"> <a class="categoryBar-list-link" href="categories/Java/">Java</a><span class="categoryBar-list-count">16</span><span class="categoryBar-list-descr">算法</span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/Golang/">Golang</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/并发/">并发</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/RPC/">RPC</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/算法/">算法</a><span class="categoryBar-list-count">12</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/MySQL/">MySQL</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/算法/图论/">图论</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/工具/">工具</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/git/">git</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/分布式/">分布式</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/算法/数据结构/">数据结构</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/操作系统/">操作系统</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>
