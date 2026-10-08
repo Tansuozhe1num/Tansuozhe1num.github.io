@@ -1,0 +1,477 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>深度学习基础 | 梦始</title><meta name="author" content="梦始"><meta name="copyright" content="梦始"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、代码练习1. 张量张量是深度学习模型训练的基本数据类型，之后的样本，训练模型都基于该数据结构进行计算，一维张量称为向量，二位张量是矩阵定义向量基本操作：使用torch.tensor1234567import torchx &#x3D; torch.tensor(666) # 一维张量y &#x3D; torch.tensor([1, 2])  # 向量z &#x3D; torch.ones(2, 3)   # 矩阵norm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习基础">
+<meta property="og:url" content="https://tansuozhe1num.github.io/2026/10/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="梦始">
+<meta property="og:description" content="一、代码练习1. 张量张量是深度学习模型训练的基本数据类型，之后的样本，训练模型都基于该数据结构进行计算，一维张量称为向量，二位张量是矩阵定义向量基本操作：使用torch.tensor1234567import torchx &#x3D; torch.tensor(666) # 一维张量y &#x3D; torch.tensor([1, 2])  # 向量z &#x3D; torch.ones(2, 3)   # 矩阵norm">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tansuozhe1num.github.io/img/ppp.png">
+<meta property="article:published_time" content="2026-10-08T01:39:19.000Z">
+<meta property="article:modified_time" content="2026-10-08T01:40:35.604Z">
+<meta property="article:author" content="梦始">
+<meta property="article:tag" content="AI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tansuozhe1num.github.io/img/ppp.png"><link rel="shortcut icon" href="/img/ppp.png"><link rel="canonical" href="https://tansuozhe1num.github.io/2026/10/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '深度学习基础',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/css/background.css"><link rel="stylesheet" href="/css/fonts.css"><link rel="stylesheet" href="/css/mousebutton.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/mainColor/heoMainColor.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/poem.css"><link rel="stylesheet" type="text/css" href="/css/fengche.css"><link rel="stylesheet" href="/css/imgloaded.css?1"><link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/zyoushuo/Blog@latest/hexo/css/loading_style_1.css" ><link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/zyoushuo/Blog@latest/hexo/css/loading_style_2.css" ><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-color: #efefef;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "/img/loading2.gif" data-lazy-src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/img/ppp.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">80</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">30</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/artitalk"><i class="fa-fw fas fa-lightbulb"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/ppp.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">梦始</span></a><a class="nav-page-title" href="/"><span class="site-name">深度学习基础</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/artitalk"><i class="fa-fw fas fa-lightbulb"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">深度学习基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-08T01:39:19.000Z" title="发表于 2026-10-08 09:39:19">2026-10-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-08T01:40:35.604Z" title="更新于 2026-10-08 09:40:35">2026-10-08</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一、代码练习"><a href="#一、代码练习" class="headerlink" title="一、代码练习"></a>一、代码练习</h1><h2 id="1-张量"><a href="#1-张量" class="headerlink" title="1. 张量"></a>1. 张量</h2><p>张量是深度学习模型训练的基本数据类型，之后的样本，训练模型都基于该数据结构进行计算，一维张量称为向量，二位张量是矩阵<br>定义向量基本操作：使用torch.tensor<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">x = torch.tensor(<span class="number">666</span>) <span class="comment"># 一维张量</span></span><br><span class="line">y = torch.tensor([<span class="number">1</span>, <span class="number">2</span>])  <span class="comment"># 向量</span></span><br><span class="line">z = torch.ones(<span class="number">2</span>, <span class="number">3</span>)   <span class="comment"># 矩阵</span></span><br><span class="line"></span><br><span class="line">normal = torch.ones(<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>) <span class="comment"># 可以是任意维度的矩阵</span></span><br></pre></td></tr></table></figure></p>
+<p>创建基本方法<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">x = torch.ones(<span class="number">2</span>, <span class="number">3</span>) <span class="comment"># 全一</span></span><br><span class="line">y = torch.zeros(<span class="number">2</span>, <span class="number">3</span>) <span class="comment"># 全0</span></span><br><span class="line">z = torch.eye(<span class="number">2</span>, <span class="number">3</span>)  <span class="comment"># 创建单位矩阵</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 按照规律创建</span></span><br><span class="line">f = torch.arange(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>) <span class="comment"># arrange(start, end, step) 从start开始到end，每步间隔step</span></span><br><span class="line">p = torch.linspace(<span class="number">0</span>, <span class="number">1</span>, <span class="number">5</span>) <span class="comment"># 在区间内均匀取点:[0, 0.25, 0.500, 0.7500, 1.000]</span></span><br><span class="line">r = torch.rand(<span class="number">2</span>, <span class="number">3</span>)  <span class="comment"># 每个元素来源[0, 1) 随机生成矩阵</span></span><br><span class="line">o = torch.randn(<span class="number">2</span>, <span class="number">3</span>) <span class="comment"># 标准正态分布</span></span><br><span class="line">h = torch.normal(mean=<span class="number">0</span>, std=<span class="number">1</span>, size=(<span class="number">2</span>, <span class="number">3</span>)) <span class="comment"># 指定不同的均值和标准差，正态分布</span></span><br><span class="line"></span><br><span class="line">k = torch.randperm(<span class="number">5</span>) <span class="comment"># 0 - 4随机排列 </span></span><br></pre></td></tr></table></figure></p>
+<p>运算：</p>
+<ul>
+<li>基本运算，加减乘除，求幂运算</li>
+<li>布尔运算、大于小于、最大最小</li>
+<li>线性运算、矩阵乘法、求模、求行列式<br>基本运算包括：abs/sqrt/div/exp/fmod/pow,以及一些三角函数cos/sin/asin/atan2/cosh, 及ceil/round/floor/trunc等<br>布尔运算:gt/lt/ge/le/eq/ne,topk, sort,max,min<br>线性计算：trace,diag,mm/bmm,t,dot/cross,inverse,svd等</li>
+</ul>
+<h2 id="2-旋转矩阵分类"><a href="#2-旋转矩阵分类" class="headerlink" title="2. 旋转矩阵分类"></a>2. 旋转矩阵分类</h2><p>初始化参数<br>![[{A6344C9E-BC08-4314-8431-6631AC183DF1}.png]]</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn, optim</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> display</span><br><span class="line"><span class="keyword">from</span> plot_lib <span class="keyword">import</span> plot_data, plot_model, set_default</span><br><span class="line"></span><br><span class="line">device = torch.device(<span class="string">&quot;cuda:0&quot;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;device: &#x27;</span>, device)</span><br><span class="line"></span><br><span class="line">seed = <span class="number">12345</span></span><br><span class="line">random.seed(seed)</span><br><span class="line">torch.manual_seed(seed)</span><br><span class="line"></span><br><span class="line">N = <span class="number">1000</span></span><br><span class="line">D = <span class="number">2</span></span><br><span class="line">C = <span class="number">3</span></span><br><span class="line">H = <span class="number">1000</span></span><br><span class="line"></span><br><span class="line">X = torch.zeros(N * C, D).to(device)</span><br><span class="line">Y = torch.zeros(N * C, dtype=torch.long).to(device)</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> <span class="built_in">range</span>(C):</span><br><span class="line">    index = <span class="number">0</span></span><br><span class="line">    t = torch.linspace(<span class="number">0</span>, <span class="number">1</span>, N)</span><br><span class="line">    inner_var = torch.linspace((<span class="number">2</span> * math.pi / C) * c, (<span class="number">2</span> * math.pi / C) * (<span class="number">2</span> + c), N) + torch.randn(N) * <span class="number">0.2</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> ix <span class="keyword">in</span> <span class="built_in">range</span>(N * c, N * (c + <span class="number">1</span>)):</span><br><span class="line">        X[ix] = t[index] * torch.FloatTensor((math.sin(inner_var[index]), math.cos(inner_var[index])))</span><br><span class="line">        Y[ix] = c</span><br><span class="line">        index += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Shapes: &quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X: &quot;</span>, X.size())</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Y: &quot;</span>, Y.size())</span><br><span class="line">plot_data(X, Y)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>几何意义：</strong></p>
+<ul>
+<li><code>t = linspace(0,1,N)</code>：从中心（半径 0）到边缘（半径 1）逐渐变大的<strong>半径</strong>。</li>
+<li><code>inner_var</code>：角度。从 <code>(2π/C)*c</code> 开始，转大约 <strong>两圈</strong>（到 <code>(2π/C)*(2+c)</code>），再加一点高斯噪声 <code>randn*0.2</code>，让点不在完美曲线上，更真实。</li>
+<li><code>(sin(θ), cos(θ))</code>：单位圆上的方向。</li>
+<li><code>t * (sin, cos)</code>：把点沿这个方向从 0 拉伸到 1，形成<strong>螺旋臂</strong>。</li>
+<li>每个 c 生成一条螺旋，3 类一共 3 条螺旋臂，彼此交错。<br>![[{34ACE4C4-7CBA-43C0-A729-C407B6B93B68}.png]]在二维平面上生成了 <strong>3 条交错的螺旋线</strong>，每条 1000 个点，共 3000 个点，标签分别是 0、1、2</li>
+</ul>
+<h3 id="线性模型分类"><a href="#线性模型分类" class="headerlink" title="线性模型分类"></a>线性模型分类</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn, optim</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> display</span><br><span class="line"><span class="keyword">from</span> plot_lib <span class="keyword">import</span> plot_data, plot_model, set_default</span><br><span class="line"></span><br><span class="line">device = torch.device(<span class="string">&quot;cuda:0&quot;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;device: &#x27;</span>, device)</span><br><span class="line"></span><br><span class="line">seed = <span class="number">12345</span></span><br><span class="line">random.seed(seed)</span><br><span class="line">torch.manual_seed(seed)</span><br><span class="line"></span><br><span class="line">N = <span class="number">1000</span></span><br><span class="line">D = <span class="number">2</span></span><br><span class="line">C = <span class="number">3</span></span><br><span class="line">H = <span class="number">1000</span></span><br><span class="line"></span><br><span class="line">X = torch.zeros(N * C, D).to(device)</span><br><span class="line">Y = torch.zeros(N * C, dtype=torch.long).to(device)</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> <span class="built_in">range</span>(C):</span><br><span class="line">    index = <span class="number">0</span></span><br><span class="line">    t = torch.linspace(<span class="number">0</span>, <span class="number">1</span>, N)</span><br><span class="line">    inner_var = torch.linspace((<span class="number">2</span> * math.pi / C) * c, (<span class="number">2</span> * math.pi / C) * (<span class="number">2</span> + c), N) + torch.randn(N) * <span class="number">0.2</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> ix <span class="keyword">in</span> <span class="built_in">range</span>(N * c, N * (c + <span class="number">1</span>)):</span><br><span class="line">        X[ix] = t[index] * torch.FloatTensor((math.sin(inner_var[index]), math.cos(inner_var[index])))</span><br><span class="line">        Y[ix] = c</span><br><span class="line">        index += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Shapes: &quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X: &quot;</span>, X.size())</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Y: &quot;</span>, Y.size())</span><br><span class="line"></span><br><span class="line">learning_rate = <span class="number">1e-3</span></span><br><span class="line">lambda_l2 = <span class="number">1e-5</span></span><br><span class="line"></span><br><span class="line">model = nn.Sequential(</span><br><span class="line">    nn.Linear(D, H),</span><br><span class="line">    nn.Linear(H, C)</span><br><span class="line">)</span><br><span class="line">model.to(device)</span><br><span class="line">criterion = torch.nn.CrossEntropyLoss()</span><br><span class="line">optimizer = torch.optim.SGD(model.parameters(), lr = learning_rate, weight_decay=lambda_l2)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">    y_pred = model(X)</span><br><span class="line">    loss = criterion(y_pred, Y)</span><br><span class="line">    score, predicted = torch.<span class="built_in">max</span>(y_pred, <span class="number">1</span>)</span><br><span class="line">    acc = (Y == predicted).<span class="built_in">sum</span>().<span class="built_in">float</span>() / <span class="built_in">len</span>(Y)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;[EPOCH]: %i, [LOSS]: %.6f, [ACCURACY]: %.3f&#x27;</span> % (t, loss.item(), acc))</span><br><span class="line">    display.clear_output(wait=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line"><span class="built_in">print</span>(model)</span><br><span class="line">plot_model(X, Y, model)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>![[{2A5D4743-1185-44DC-B67D-1E4B41B58D8B}.png]]<br>现在模型相当于线性变换，将3000个样本全部喂到模型里，训练梯度并累计之后，准确率来到50%，由于全线性，比较难以拟合螺旋数据，所以准确率难以提高</p>
+<h3 id="两层神经网络（加Relu版本）"><a href="#两层神经网络（加Relu版本）" class="headerlink" title="两层神经网络（加Relu版本）"></a>两层神经网络（加Relu版本）</h3><p>在线性两层网络基础上加入Relu，使得训练曲线可以弯曲，在原来两层神经网络中，<br>有 一层： W = w1 @ X1 + b1 + w2 @ X2 + b2 … -&gt; 两层W = (w1 @ X1 + b1 + w2 @ X2 + b2 ..) @ X1 + b1 依旧是线性的，加入激活函数后使得原来的训练曲线可以变成折现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn, optim</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> display</span><br><span class="line"><span class="keyword">from</span> plot_lib <span class="keyword">import</span> plot_data, plot_model, set_default</span><br><span class="line"></span><br><span class="line">device = torch.device(<span class="string">&quot;cuda:0&quot;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;device: &#x27;</span>, device)</span><br><span class="line"></span><br><span class="line">seed = <span class="number">12345</span></span><br><span class="line">random.seed(seed)</span><br><span class="line">torch.manual_seed(seed)</span><br><span class="line"></span><br><span class="line">N = <span class="number">1000</span></span><br><span class="line">D = <span class="number">2</span></span><br><span class="line">C = <span class="number">3</span></span><br><span class="line">H = <span class="number">1000</span></span><br><span class="line"></span><br><span class="line">X = torch.zeros(N * C, D).to(device)</span><br><span class="line">Y = torch.zeros(N * C, dtype=torch.long).to(device)</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> <span class="built_in">range</span>(C):</span><br><span class="line">    index = <span class="number">0</span></span><br><span class="line">    t = torch.linspace(<span class="number">0</span>, <span class="number">1</span>, N)</span><br><span class="line">    inner_var = torch.linspace((<span class="number">2</span> * math.pi / C) * c, (<span class="number">2</span> * math.pi / C) * (<span class="number">2</span> + c), N) + torch.randn(N) * <span class="number">0.2</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> ix <span class="keyword">in</span> <span class="built_in">range</span>(N * c, N * (c + <span class="number">1</span>)):</span><br><span class="line">        X[ix] = t[index] * torch.FloatTensor((math.sin(inner_var[index]), math.cos(inner_var[index])))</span><br><span class="line">        Y[ix] = c</span><br><span class="line">        index += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Shapes: &quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X: &quot;</span>, X.size())</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Y: &quot;</span>, Y.size())</span><br><span class="line"></span><br><span class="line">learning_rate = <span class="number">1e-3</span></span><br><span class="line">lambda_l2 = <span class="number">1e-5</span></span><br><span class="line"></span><br><span class="line">model = nn.Sequential(</span><br><span class="line">    nn.Linear(D, H),</span><br><span class="line">    nn.ReLU(), <span class="comment"># 加入ReLU</span></span><br><span class="line">    nn.Linear(H, C)</span><br><span class="line">)</span><br><span class="line">model.to(device)</span><br><span class="line">criterion = torch.nn.CrossEntropyLoss()</span><br><span class="line">optimizer = torch.optim.SGD(model.parameters(), lr = learning_rate, weight_decay=lambda_l2)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">    y_pred = model(X)</span><br><span class="line">    loss = criterion(y_pred, Y)</span><br><span class="line">    score, predicted = torch.<span class="built_in">max</span>(y_pred, <span class="number">1</span>)</span><br><span class="line">    acc = (Y == predicted).<span class="built_in">sum</span>().<span class="built_in">float</span>() / <span class="built_in">len</span>(Y)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;[EPOCH]: %i, [LOSS]: %.6f, [ACCURACY]: %.3f&#x27;</span> % (t, loss.item(), acc))</span><br><span class="line">    display.clear_output(wait=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line"><span class="built_in">print</span>(model)</span><br><span class="line">plot_model(X, Y, model)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>![[{E25A7979-08BB-4BF6-A201-B3F58391B436}.png]]<br>准确率来到99%</p>
+<h1 id="二、知识回答"><a href="#二、知识回答" class="headerlink" title="二、知识回答"></a>二、知识回答</h1><h2 id="1、AlexNet有哪些特点？为什么可以比LeNet取得更好的性能？"><a href="#1、AlexNet有哪些特点？为什么可以比LeNet取得更好的性能？" class="headerlink" title="1、AlexNet有哪些特点？为什么可以比LeNet取得更好的性能？"></a>1、AlexNet有哪些特点？为什么可以比LeNet取得更好的性能？</h2><p>AlexNet 的核心特点：</p>
+<ul>
+<li>结构：8层</li>
+<li>激活：ReLU</li>
+<li>池化：重叠最大池化</li>
+<li>正则：Dropout, 数据增强, weight decay, LRN</li>
+<li>训练：双GPU分组卷积，SGD momentum，学习率衰减，模型集成…</li>
+<li>输入输出：227x227x3，1000类。</li>
+</ul>
+<p>与LeNet对比：<br>LeNet：浅、小、灰度32x32、sigmoid/tanh、平均池化、无Dropout/数据增强、约60k参数。<br>AlexNet：深、大、彩色高分辨率、ReLU、最大池化、Dropout/数据增强、约60M参数。</p>
+<p>为什么更好：</p>
+<ol>
+<li>数据和任务：ImageNet大规模复杂，LeNet MNIST简单。</li>
+<li>容量和深度：更多层学层次特征。</li>
+<li>ReLU：缓解梯度消失，训练快。</li>
+<li>正则化：Dropout+数据增强+权重衰减+LRN，防过拟合。</li>
+<li>池化：重叠最大池化保留信息。</li>
+<li>GPU：使大模型训练可行，双GPU分组卷积。</li>
+<li>训练策略：学习率衰减、动量、模型集成。<br>所以AlexNet在ImageNet上top-5错误率16.4%，远超第二名。它不是LeNet简单放大，而是适应大数据/复杂图像的现代CNN开端。</li>
+</ol>
+<h2 id="2、激活函数有哪些作⽤？"><a href="#2、激活函数有哪些作⽤？" class="headerlink" title="2、激活函数有哪些作⽤？"></a>2、激活函数有哪些作⽤？</h2><p>假设你有一堆数据点，它们大致排成一条优美的曲线。但你手里只有一把直尺，只能画直线。无论怎么调整角度和位置，直线都无法贴合那条曲线——这就是<strong>线性模型</strong>的困境。</p>
+<p>神经网络最初也面临同样的问题。但有了<strong>激活函数</strong>，它才从“只会画直线”进化成“能画任意曲线”的强大工具。</p>
+<p>最简单的模型是线性回归：<br>y=wx+by=wx+b<br>其中 ww 是权重，bb 是偏置。给它一组数据，它找到一条直线，让预测值尽量接近真实值。<br>如果堆叠多层线性变换呢？<br>y=W2(W1x+b1)+b2y=W2​(W1​x+b1​)+b2​<br>展开后仍然是：<br>y=Wx+by=Wx+b<br>也就是说，<strong>多层线性网络等价于单层线性网络</strong>。无论叠多少层，它依然只能拟合直线（或高维空间中的平面）。这显然无法处理图像、语音、自然语言等复杂任务。</p>
+<p>拟合曲线：需要非线性<br>要让网络拟合曲线，必须在层与层之间加入<strong>非线性变换</strong>。这个变换就是激活函数。<br>激活函数通常作用在神经元的线性输出之后：<br>a=f(Wx+b)a=f(Wx+b)<br>其中 ff 就是激活函数。有了它，多层网络就不再等价于单层线性模型，而是可以逼近任意复杂的非线性函数——这就是<strong>通用逼近定理</strong>的直观含义。<br>可以说：<strong>线性层负责“画线”，激活函数负责“把线掰弯”</strong>。多层非线性组合起来，就能拼出任意曲线。</p>
+<h3 id="1-Sigmoid"><a href="#1-Sigmoid" class="headerlink" title="1. Sigmoid"></a>1. Sigmoid</h3><p>σ(x)=11+e−xσ(x)=1+e−x1​<br>它的输出范围是 (0,1)(0,1)，形状像一条平滑的 S 形曲线。</p>
+<p><strong>优点：</strong></p>
+<ul>
+<li>输出可解释为概率，适合二分类输出层。</li>
+<li>平滑可导，便于反向传播。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>当输入很大或很小时，导数接近 0，导致<strong>梯度消失</strong>。</li>
+<li>输出不是零中心，可能让训练不稳定。</li>
+<li>计算涉及指数，相对较慢。</li>
+</ul>
+<h3 id="2-Tanh"><a href="#2-Tanh" class="headerlink" title="2. Tanh"></a>2. Tanh</h3><p>tanh⁡(x)=ex−e−xex+e−xtanh(x)=ex+e−xex−e−x​<br>输出范围是 (−1,1)(−1,1)，也是 S 形曲线，但<strong>零中心</strong>。<br><strong>优点：</strong></p>
+<ul>
+<li>零中心，通常比 Sigmoid 收敛更快。</li>
+<li>同样平滑可导。<br><strong>缺点：</strong></li>
+<li>两端依然饱和，梯度消失问题仍然存在。</li>
+<li>计算量也不小。</li>
+</ul>
+<h3 id="3-ReLU（Rectified-Linear-Unit）"><a href="#3-ReLU（Rectified-Linear-Unit）" class="headerlink" title="3. ReLU（Rectified Linear Unit）"></a>3. <strong>ReLU（Rectified Linear Unit）</strong></h3><p>ReLU(x)=max⁡(0,x)ReLU(x)=max(0,x)<br>它非常简单：正数原样输出，负数直接置零。<br><strong>优点：</strong></p>
+<ul>
+<li>正区间导数恒为 1，<strong>有效缓解梯度消失</strong>。</li>
+<li>计算极快，只需比较和取最大值。</li>
+<li>负区间输出为 0，产生<strong>稀疏激活</strong>，有时能提升泛化。<br><strong>缺点：</strong></li>
+<li>负区间导数为 0，可能导致“神经元死亡”——某些神经元永远不再激活。</li>
+<li>输出不是零中心。<br>为了解决神经元死亡，后续又出现了 <strong>Leaky ReLU、ELU、GELU、Swish</strong> 等变体，但 ReLU 依然是很多网络的基础。<h2 id="3、梯度消失现象是什么？"><a href="#3、梯度消失现象是什么？" class="headerlink" title="3、梯度消失现象是什么？"></a>3、梯度消失现象是什么？</h2><strong>梯度消失（vanishing gradient）</strong> 是指在深层神经网络训练时，反向传播的梯度从输出层向输入层逐层传播，由于链式法则中多个局部导数相乘，梯度幅度逐层衰减，导致靠近输入层的参数几乎得不到有效更新。</li>
+</ul>
+<p>反向传播时，每一层都要把梯度“乘上”本层的导数再往前传。如果每一层的导数都小于 1，那么乘很多次后，梯度就会指数级变小：<br>0.25×0.25×0.25×⋯≈00.25×0.25×0.25×⋯≈0<br>例如 <strong>sigmoid</strong> 函数的导数最大只有 0.25：</p>
+<p>σ′(z)=σ(z)(1−σ(z))≤0.25σ′(z)=σ(z)(1−σ(z))≤0.25</p>
+<p>所以一个 10 层网络反向传播时，梯度可能变成 0.2510≈10−60.2510≈10−6，到浅层时几乎为零。</p>
+<h3 id="主要表现"><a href="#主要表现" class="headerlink" title="主要表现"></a>主要表现</h3><ul>
+<li>靠近输入层的参数更新非常慢，甚至几乎不更新。</li>
+<li>浅层学不到有效特征，底层特征质量差。</li>
+<li>网络越深，训练越困难，损失下降慢或效果差。</li>
+<li>靠近输出层的梯度可能还正常，但传到前面就消失了。</li>
+</ul>
+<h2 id="4、神经网络是更宽好还是更深好？"><a href="#4、神经网络是更宽好还是更深好？" class="headerlink" title="4、神经网络是更宽好还是更深好？"></a>4、神经网络是更宽好还是更深好？</h2><h3 id="深度更好原因"><a href="#深度更好原因" class="headerlink" title="深度更好原因"></a>深度更好原因</h3><ol>
+<li><strong>层次化特征表达</strong><br> 深层网络可以逐层组合：边缘 → 纹理 → 部件 → 物体。<br> 对图像、语音、自然语言等复杂任务，这种层次抽象非常关键。</li>
+<li><strong>参数效率更高</strong><br> 某些复杂函数，浅而宽的网络可能需要指数级神经元，深层网络用少得多的参数就能表示。<br> 也就是说，深度可以带来表达能力的“指数级增益”。</li>
+<li><strong>现代主流架构以深为主</strong><br> AlexNet、VGG、ResNet、DenseNet、Transformer 都通过增加深度来提升性能。<br> 尤其是 ResNet 用残差连接解决了“更深反而退化”的问题。<br><strong>代价：</strong></li>
+</ol>
+<ul>
+<li>容易梯度消失/爆炸。</li>
+<li>训练慢，收敛难。</li>
+<li>需要 BN、残差连接、合适初始化等技巧。</li>
+<li>太深会出现退化问题：训练误差反而上升。    </li>
+</ul>
+<h3 id="宽度更好原因"><a href="#宽度更好原因" class="headerlink" title="宽度更好原因"></a>宽度更好原因</h3><ol>
+<li><strong>单层容量大</strong><br> 宽度增加每层的神经元/通道数，能同时学习更多特征。</li>
+<li><strong>更容易优化和并行</strong><br> 宽网络梯度路径多，训练通常更稳定，GPU 并行效率也较高。</li>
+<li><strong>浅层宽网络也能逼近复杂函数</strong><br> 通用逼近定理说：单隐层只要足够宽，可以逼近任意连续函数。</li>
+</ol>
+<p><strong>代价：</strong></p>
+<ul>
+<li>参数爆炸，内存和计算成本高。</li>
+<li>泛化不一定更好，容易过拟合。</li>
+<li>难以学习深层组合特征。</li>
+<li>对某些任务，宽度收益边际递减很快。</li>
+</ul>
+<h3 id="经验规律"><a href="#经验规律" class="headerlink" title="经验规律"></a>经验规律</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>情况</th>
+<th>更推荐</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>复杂图像、语音、NLP</td>
+<td>加深，配合残差/BN</td>
+</tr>
+<tr>
+<td>简单任务、小数据</td>
+<td>浅而宽或浅而窄即可</td>
+</tr>
+<tr>
+<td>训练困难、梯度消失</td>
+<td>加宽、加残差、换 ReLU</td>
+</tr>
+<tr>
+<td>欠拟合</td>
+<td>先加深，再增宽</td>
+</tr>
+<tr>
+<td>过拟合</td>
+<td>不要盲目加宽或加深，先加正则化</td>
+</tr>
+<tr>
+<td>计算预算有限</td>
+<td>深度优先，宽度辅助</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="5、为什么要使⽤Softmax"><a href="#5、为什么要使⽤Softmax" class="headerlink" title="5、为什么要使⽤Softmax?"></a>5、为什么要使⽤Softmax?</h2><p>多分类网络的原始输出只是一组任意实数（logits），不能直接当作概率；Softmax 把它们变成“非负、和为 1”的概率分布，并且可导，便于用交叉熵损失和梯度下降训练。</p>
+<h2 id="6、SGD-和-Adam-哪个更有效？"><a href="#6、SGD-和-Adam-哪个更有效？" class="headerlink" title="6、SGD 和 Adam 哪个更有效？"></a>6、SGD 和 Adam 哪个更有效？</h2><h3 id="SGD"><a href="#SGD" class="headerlink" title="SGD"></a>SGD</h3><p>$θt+1=θt−ηgtθt+1​=θt​−ηgt​$</p>
+<p>带动量时：<br>$vt=βvt−1+gt,θt+1=θt−ηvtvt​=βvt−1​+gt​,θt+1​=θt​−ηvt​$</p>
+<ul>
+<li>所有参数共用一个学习率。</li>
+<li>对学习率、调度策略非常敏感。</li>
+<li>梯度噪声大，但有时这种噪声有助于泛化。<h3 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h3>$mt=β1mt−1+(1−β1)gtmt​=β1​mt−1​+(1−β1​)gt​vt=β2vt−1+(1−β2)gt2vt​=β2​vt−1​+(1−β2​)gt2​$</li>
+</ul>
+<p>再做偏差校正，更新：</p>
+<p>$θt+1=θt−ηm^tv^t+ϵθt+1​=θt​−ηv^t​​+ϵm^t​​$</p>
+<ul>
+<li>为每个参数自适应调整学习率。    </li>
+<li>初期收敛快，对学习率不那么敏感。</li>
+<li>需要保存一阶矩和二阶矩，内存开销更大。</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>SGD + Momentum</th>
+<th>Adam / AdamW</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>收敛速度</td>
+<td>初期慢，需调 LR</td>
+<td>初期快</td>
+</tr>
+<tr>
+<td>超参敏感度</td>
+<td>对 LR 很敏感</td>
+<td>对 LR 较鲁棒</td>
+</tr>
+<tr>
+<td>最终泛化</td>
+<td>常更好，尤其 CV</td>
+<td>可能稍差，AdamW 改善明显</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>低</td>
+<td>高，需存 m、v</td>
+</tr>
+<tr>
+<td>稀疏梯度</td>
+<td>差</td>
+<td>好</td>
+</tr>
+<tr>
+<td>常见场景</td>
+<td>ResNet、经典 CV</td>
+<td>Transformer、NLP、稀疏特征</td>
+</tr>
+<tr>
+<td>训练稳定性</td>
+<td>依赖调参</td>
+<td>通常更稳</td>
+</tr>
+</tbody>
+</table>
+</div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="Dreamstart">梦始</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://tansuozhe1num.github.io/2026/10/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/">https://tansuozhe1num.github.io/2026/10/08/深度学习基础/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Tansuozhe1num.github.io" target="_blank">梦始</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AI/">AI</a></div><div class="post-share"><div class="social-share" data-image="/img/ppp.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/03/19/RAG/" title="RAG"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">RAG</div></div><div class="info-2"><div class="info-item-1">存在意义使用langchain或者其他框架操作prompts，总是希望模型能够记忆之前用户和模型对话的关键信息，但是大模型作为一个续写的深度学习模型不会自带记忆，需要有对应的外加操作来保存历史对话和从历史对话中检索相似或者有关的信息拼接prompts，存储消息的方式可以和后端存储数据一样，于是有了向量数据库，将历史对话做分词，分词映射成向量，组合形成向量数组，存储到向量数据库中并检索匹配的操作，即RAG 基本流程包裹索引， 检索和生成  索引阶段  将用户的语言按照一定数据源（可以自己定义），将其切分成标准长度的文本块（chunk），进行向量化嵌入（embedding），存储在向量数据库中  加载文件 内容提取 文本切割 文本向量化 存向量数据库   检索在向量数据库检索相似的前topk个文本块，将文本块拼接在调用的message里面，询问大模型  生成对应的response，根据自己定义的数据格式或者根据返回可以做后续操作   embedding向量化的细节操作  离线流程： 知识和信息 -&gt; 嵌入化 -&gt; 存入数据库 在线流程： 询问          ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/03/19/RAG/" title="RAG"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-19</div><div class="info-item-2">RAG</div></div><div class="info-2"><div class="info-item-1">存在意义使用langchain或者其他框架操作prompts，总是希望模型能够记忆之前用户和模型对话的关键信息，但是大模型作为一个续写的深度学习模型不会自带记忆，需要有对应的外加操作来保存历史对话和从历史对话中检索相似或者有关的信息拼接prompts，存储消息的方式可以和后端存储数据一样，于是有了向量数据库，将历史对话做分词，分词映射成向量，组合形成向量数组，存储到向量数据库中并检索匹配的操作，即RAG 基本流程包裹索引， 检索和生成  索引阶段  将用户的语言按照一定数据源（可以自己定义），将其切分成标准长度的文本块（chunk），进行向量化嵌入（embedding），存储在向量数据库中  加载文件 内容提取 文本切割 文本向量化 存向量数据库   检索在向量数据库检索相似的前topk个文本块，将文本块拼接在调用的message里面，询问大模型  生成对应的response，根据自己定义的数据格式或者根据返回可以做后续操作   embedding向量化的细节操作  离线流程： 知识和信息 -&gt; 嵌入化 -&gt; 存入数据库 在线流程： 询问          ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src= "/img/loading2.gif" data-lazy-src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/img/ppp.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">梦始</div><div class="author-info-description">“今朝有酒，何妨纵歌！”</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">80</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">30</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Tansuozhe1num"><i class="fab fa-github"></i><span>闲来饮茶</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Keep programming, keep progressing</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%A3%E7%A0%81%E7%BB%83%E4%B9%A0"><span class="toc-number">1.</span> <span class="toc-text">一、代码练习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%BC%A0%E9%87%8F"><span class="toc-number">1.1.</span> <span class="toc-text">1. 张量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%97%8B%E8%BD%AC%E7%9F%A9%E9%98%B5%E5%88%86%E7%B1%BB"><span class="toc-number">1.2.</span> <span class="toc-text">2. 旋转矩阵分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E5%88%86%E7%B1%BB"><span class="toc-number">1.2.1.</span> <span class="toc-text">线性模型分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%A4%E5%B1%82%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88%E5%8A%A0Relu%E7%89%88%E6%9C%AC%EF%BC%89"><span class="toc-number">1.2.2.</span> <span class="toc-text">两层神经网络（加Relu版本）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%9F%A5%E8%AF%86%E5%9B%9E%E7%AD%94"><span class="toc-number">2.</span> <span class="toc-text">二、知识回答</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81AlexNet%E6%9C%89%E5%93%AA%E4%BA%9B%E7%89%B9%E7%82%B9%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AF%E4%BB%A5%E6%AF%94LeNet%E5%8F%96%E5%BE%97%E6%9B%B4%E5%A5%BD%E7%9A%84%E6%80%A7%E8%83%BD%EF%BC%9F"><span class="toc-number">2.1.</span> <span class="toc-text">1、AlexNet有哪些特点？为什么可以比LeNet取得更好的性能？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E6%9C%89%E5%93%AA%E4%BA%9B%E4%BD%9C%E2%BD%A4%EF%BC%9F"><span class="toc-number">2.2.</span> <span class="toc-text">2、激活函数有哪些作⽤？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Sigmoid"><span class="toc-number">2.2.1.</span> <span class="toc-text">1. Sigmoid</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Tanh"><span class="toc-number">2.2.2.</span> <span class="toc-text">2. Tanh</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ReLU%EF%BC%88Rectified-Linear-Unit%EF%BC%89"><span class="toc-number">2.2.3.</span> <span class="toc-text">3. ReLU（Rectified Linear Unit）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%E7%8E%B0%E8%B1%A1%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">2.3.</span> <span class="toc-text">3、梯度消失现象是什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E8%A1%A8%E7%8E%B0"><span class="toc-number">2.3.1.</span> <span class="toc-text">主要表现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%98%AF%E6%9B%B4%E5%AE%BD%E5%A5%BD%E8%BF%98%E6%98%AF%E6%9B%B4%E6%B7%B1%E5%A5%BD%EF%BC%9F"><span class="toc-number">2.4.</span> <span class="toc-text">4、神经网络是更宽好还是更深好？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E6%9B%B4%E5%A5%BD%E5%8E%9F%E5%9B%A0"><span class="toc-number">2.4.1.</span> <span class="toc-text">深度更好原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%BD%E5%BA%A6%E6%9B%B4%E5%A5%BD%E5%8E%9F%E5%9B%A0"><span class="toc-number">2.4.2.</span> <span class="toc-text">宽度更好原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%8F%E9%AA%8C%E8%A7%84%E5%BE%8B"><span class="toc-number">2.4.3.</span> <span class="toc-text">经验规律</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E2%BD%A4Softmax"><span class="toc-number">2.5.</span> <span class="toc-text">5、为什么要使⽤Softmax?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81SGD-%E5%92%8C-Adam-%E5%93%AA%E4%B8%AA%E6%9B%B4%E6%9C%89%E6%95%88%EF%BC%9F"><span class="toc-number">2.6.</span> <span class="toc-text">6、SGD 和 Adam 哪个更有效？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SGD"><span class="toc-number">2.6.1.</span> <span class="toc-text">SGD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Adam"><span class="toc-number">2.6.2.</span> <span class="toc-text">Adam</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/ppp.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2026 By 梦始</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vanilla-lazyload/17.3.1/lazyload.iife.min.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'kxghUXJtVZdyXBt4VLHWbXjv-gzGzoHsz',
+      appKey: 'kRvx5uuFfMszFghHFIU8HTyY',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/valine/1.4.16/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script src="/js/jquery.min.js"></script><script data-pjax type="text/javascript" src="/js/languages.js"></script><script data-pjax type="text/javascript" src="/js/calendar.js"></script><script src="/js/pace.min.js" async></script><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async data-pjax src="/js/imgloaded.js?1"></script><script src="/js/weather.js"></script><script defer src="/js/fish.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="(^з^),(￣∇￣),♪──Ｏ（≧∇≦）Ｏ───♪,ε=ε=ε=┌(;￣◇￣)┘,┬─┬ ノ( ゜-゜ノ)" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover1.webp);"> <a class="categoryBar-list-link" href="categories/codeforce题解/">codeforce题解</a><span class="categoryBar-list-count">9</span><span class="categoryBar-list-descr">后端</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover2.webp);"> <a class="categoryBar-list-link" href="categories/Atcoder/">Atcoder</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">Java</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover3.webp);"> <a class="categoryBar-list-link" href="categories/后端/">后端</a><span class="categoryBar-list-count">9</span><span class="categoryBar-list-descr">Codeforce</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover4.webp);"> <a class="categoryBar-list-link" href="categories/计算机网络/">计算机网络</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr">前端</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover5.webp);"> <a class="categoryBar-list-link" href="categories/ElasticSearch/">ElasticSearch</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">计算机网路</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover6.webp);"> <a class="categoryBar-list-link" href="categories/前端/">前端</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">工具</span></li><li class="categoryBar-list-item" style="background:url(https://npm.elemecdn.com/akilar-candyassets/image/cover6.webp);"> <a class="categoryBar-list-link" href="categories/Java/">Java</a><span class="categoryBar-list-count">16</span><span class="categoryBar-list-descr">算法</span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/Golang/">Golang</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/并发/">并发</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/算法/">算法</a><span class="categoryBar-list-count">12</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/RPC/">RPC</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/AI/">AI</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/MySQL/">MySQL</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/算法/图论/">图论</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/git/">git</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/工具/">工具</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/分布式/">分布式</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/redis/">redis</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/算法/数据结构/">数据结构</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="categories/操作系统/">操作系统</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2025/03/03/正则表达式/" alt=""><img width="48" height="48" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-03-03</span><a class="blog-slider__title" href="2025/03/03/正则表达式/" alt="">正则表达式</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2025/03/03/正则表达式/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2025/03/01/HTML/" alt=""><img width="48" height="48" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2025-03-01</span><a class="blog-slider__title" href="2025/03/01/HTML/" alt="">HTML</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" href="2025/03/01/HTML/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'index';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>
